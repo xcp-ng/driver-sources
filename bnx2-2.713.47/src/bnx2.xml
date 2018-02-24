@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<pcitable>
+  <vendor id="14e4">
+    <short>Broadcom</short>
+    <name>Broadcom Corporation</name>
+    <device id="164a">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II 5706 Gigabit Ethernet</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5706 Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5706 Gigabit Ethernet</desc>
+      </table>
+    </device>
+    <device id="164c">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5708 1000Base-T</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5708 Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5708 Gigabit Ethernet</desc>
+      </table>
+    </device>
+    <device id="16aa">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5706S 1000Base-SX</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5706S Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5706S Gigabit Ethernet</desc>
+      </table>
+    </device>
+    <device id="16ac">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5708S 1000Base-SX</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5708S Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5708S Gigabit Ethernet</desc>
+      </table>
+    </device>
+    <device id="1639">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5709 1000Base-T</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5709 Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5709 Gigabit Ethernet</desc>
+      </table>
+    </device>
+    <device id="163a">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5709S 1000Base-SX</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5709S Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5709S Gigabit Ethernet</desc>
+      </table>
+    </device>
+     <device id="163b">
+       <vmware label="nic">
+         <driver>bnx2</driver>
+       </vmware>
+       <name>Broadcom NetXtreme II BCM5716 1000Base-T</name>
+       <table file="pcitable" module="ignore">
+         <desc>Broadcom Corporation|BCM5716 Gigabit Ethernet</desc>
+       </table>
+       <table file="pcitable.Linux" module="bnx2">
+         <desc>Broadcom Corporation|BCM5716 Gigabit Ethernet</desc>
+       </table>
+     </device>
+    <device id="163c">
+      <vmware label="nic">
+        <driver>bnx2</driver>
+      </vmware>
+      <name>Broadcom NetXtreme II BCM5716S 1000Base-SX</name>
+      <table file="pcitable" module="ignore">
+        <desc>Broadcom Corporation|BCM5716S Gigabit Ethernet</desc>
+      </table>
+      <table file="pcitable.Linux" module="bnx2">
+        <desc>Broadcom Corporation|BCM5716S Gigabit Ethernet</desc>
+      </table>
+    </device>
+  </vendor>
+</pcitable>
