@@ -1,0 +1,245 @@
+/* fnic_config.h.in.  Generated from configure.ac by autoheader.  */
+
+/*
+ * Copyright 2008-2019 Cisco Systems, Inc.  All rights reserved.
+ * Copyright 2007 Nuova Systems, Inc.  All rights reserved.
+ *
+ * This program is free software; you may redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+#ifndef FNIC_CONFIG_H
+#define FNIC_CONFIG_H
+
+
+
+/* Whether we have declaration call_usermodehelper in <call_usermodehelper> or
+   not */
+#undef FNIC_CUMH_IN_KMOD_H
+
+/* Whether we have declaration call_usermodehelper in <call_usermodehelper> or
+   not */
+#undef FNIC_CUMH_IN_UMH_H
+
+/* Whether we have member struct blk_mq_tag_set.mq_map in <linux/blk-mq.h> or
+   not */
+#undef FNIC_HAVE_BLK_MQ_TAG_SET_MQ_MAP
+
+/* Whether we have declaration compare_ether_addr in <compare_ether_addr> or
+   not */
+#undef FNIC_HAVE_COMPARE_ETHER_ADDR
+
+/* Whether we have declaration current_kernel_time in #include <linux/time.h>
+   #include <linux/ktime.h> #include <linux/jiffies.h> #include
+   <linux/timekeeping.h> or not */
+#undef FNIC_HAVE_CURRENT_KERNEL_TIME
+
+/* Whether we have nvme_fc_ersp_iu.ersp_result or not */
+#undef FNIC_HAVE_ERSP_RESULT
+
+/* Whether we have declaration ether_addr_equal in <ether_addr_equal> or not
+   */
+#undef FNIC_HAVE_ETHER_ADDR_EQUAL
+
+/* Whether we have declaration fc_eh_timed_out in <fc_eh_timed_out> or not */
+#undef FNIC_HAVE_FC_EH_TIMED_OUT
+
+/* Whether we have declaration FC_PORTSPEED_128GBIT in #include
+   <scsi/scsi_transport_fc.h> or not */
+#undef FNIC_HAVE_FC_PORTSPEED_128GBIT
+
+/* Whether we have declaration FC_PORTSPEED_64GBIT in #include
+   <scsi/scsi_transport_fc.h> or not */
+#undef FNIC_HAVE_FC_PORTSPEED_64GBIT
+
+/* Whether we have struct fip_vlan_desc or not */
+#undef FNIC_HAVE_FIP_VLAN_DESC
+
+/* Whether we have declaration irq_get_effective_affinity_mask in
+   <irq_get_effective_affinity_mask> or not */
+#undef FNIC_HAVE_IRQ_GET_EFFECTIVE_AFFINITY_MASK
+
+/* Whether we have declaration jiffies_to_timespec64 in
+   <jiffies_to_timespec64> or not */
+#undef FNIC_HAVE_JIFFIES_TO_TIMESPEC64
+
+/* Whether we have declaration kstrtoul in <kstrtoul> or not */
+#undef FNIC_HAVE_KSTRTOUL
+
+/* Whether we have declaration ktime_get_real_ts64 in #include <linux/time.h>
+   #include <linux/ktime.h> #include <linux/timekeeping.h> or not */
+#undef FNIC_HAVE_KTIME_GET_REAL_TS64
+
+/* Whether nvme does autoconnect or not */
+#undef FNIC_HAVE_NVME_AUTOCONNECT
+
+/* Whether we have member struct nvme_fc_port_template.poll_queue in
+   <linux/nvme-fc-driver.h> or not */
+#undef FNIC_HAVE_NVME_FC_TEMPLATE_POLL_QUEUE
+
+/* Whether we have declaration pci_enable_msix in <pci_enable_msix> or not */
+#undef FNIC_HAVE_PCI_ENABLE_MSIX
+
+/* Whether we have declaration pci_enable_msix_exact in
+   <pci_enable_msix_exact> or not */
+#undef FNIC_HAVE_PCI_ENABLE_MSIX_EXACT
+
+/* Whether we have declaration pci_irq_vector in <pci_irq_vector> or not */
+#undef FNIC_HAVE_PCI_IRQ_VECTOR
+
+/* Whether we have declaration scsi_change_queue_depth in
+   <scsi_change_queue_depth> or not */
+#undef FNIC_HAVE_SCSI_CHANGE_QUEUE_DEPTH
+
+/* Whether we have declaration scsi_cmd_to_rq in <scsi_cmd_to_rq> or not */
+#undef FNIC_HAVE_SCSI_CMD_TO_RQ
+
+/* Whether <scsi/scsi_device.h> exists or not */
+#undef FNIC_HAVE_SCSI_DEVICE_H
+
+/* Whether we have declaration scsi_cmd_get_serial in <scsi_cmd_get_serial> or
+   not */
+#undef FNIC_HAVE_SCSI_GET_SERIAL
+
+/* Whether we have member struct scsi_host_template.eh_timed_out in
+   <scsi/scsi_host.h> or not */
+#undef FNIC_HAVE_SCSI_HOST_TEMPLATE_EH_TIMED_OUT
+
+/* Whether we have member struct scsi_host_template.map_queues in
+   <scsi/scsi_host.h> or not */
+#undef FNIC_HAVE_SCSI_HOST_TEMPLATE_MAP_QUEUES
+
+/* Whether we have member struct scsi_host_template.track_queue_depth in
+   <scsi/scsi_host.h> or not */
+#undef FNIC_HAVE_SCSI_HOST_TEMPLATE_TRACK_QUEUE_DEPTH
+
+/* Whether we have declaration scsi_activate_tcq in <scsi_activate_tcq> or not
+   */
+#undef FNIC_HAVE_SCSI_TCQ
+
+/* Whether we have member struct scsi_host_template.use_clustering in
+   <scsi/scsi_host.h> or not */
+#undef FNIC_HAVE_SCSI_USE_CLUSTERING
+
+/* Whether we have declaration FIP_SC_VL_NOTE in #include
+   <uapi/linux/if_ether.h> #include <scsi/fc/fc_fip.h> or not */
+#undef FNIC_HAVE_SC_VL_NOTE
+
+/* Whether we have declaration FIP_SC_VL_REP in #include
+   <uapi/linux/if_ether.h> #include <scsi/fc/fc_fip.h> or not */
+#undef FNIC_HAVE_SC_VL_REP
+
+/* Whether we have declaration setup_timer in <setup_timer> or not */
+#undef FNIC_HAVE_SETUP_TIMER
+
+/* Whether we have declaration shost_use_blk_mq in <shost_use_blk_mq> or not
+   */
+#undef FNIC_HAVE_SHOST_USE_BLK_MQ
+
+/* Whether we have declaration strict_strtoul in <strict_strtoul> or not */
+#undef FNIC_HAVE_STRICT_STRTOUL
+
+/* Whether we have declaration time64_to_tm in <time64_to_tm> or not */
+#undef FNIC_HAVE_TIME64_TO_TM
+
+/* Whether we have declaration timer_setup in <timer_setup> or not */
+#undef FNIC_HAVE_TIMER_SETUP
+
+/* Whether we have declaration timespec64_sub in <timespec64_sub> or not */
+#undef FNIC_HAVE_TIMESPEC64_SUB
+
+/* Whether we have declaration timespec_sub in <timespec_sub> or not */
+#undef FNIC_HAVE_TIMESPEC_SUB
+
+/* Whether we have declaration time_to_tm in <time_to_tm> or not */
+#undef FNIC_HAVE_TIME_TO_TM
+
+/* Whether <linux/vmalloc.h> exists or not */
+#undef FNIC_HAVE_VMALLOC_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <linux/netdevice.h> header file. */
+#undef HAVE_LINUX_NETDEVICE_H
+
+/* Define to 1 if you have the <linux/vmalloc.h> header file. */
+#undef HAVE_LINUX_VMALLOC_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <scsi/scsi_device.h> header file. */
+#undef HAVE_SCSI_SCSI_DEVICE_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* defines sles patchlevel if building for a SLES distro */
+#undef SLES_PATCHLEVEL
+
+/* defines sles version if building for a SLES distro */
+#undef SLES_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Extra KCFLAGS from VIC_CHECK_GCC_RETPOLINE */
+#undef VIC_EXTRA_KCFLAGS
+
+/* Whether this driver was compiled with retpoline support or not */
+#undef VIC_HAVE_RETPOLINE
+
+
+
+#include "fnic_config_bottom.h"
+
+#endif /* FNIC_CONFIG_H */
+
