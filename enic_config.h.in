@@ -1,0 +1,613 @@
+/* enic_config.h.in.  Generated from configure.ac by autoheader.  */
+
+/*
+ * Copyright 2008-2018 Cisco Systems, Inc.  All rights reserved.
+ * Copyright 2007 Nuova Systems, Inc.  All rights reserved.
+ *
+ * This program is free software; you may redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+#ifndef ENIC_CONFIG_H
+#define ENIC_CONFIG_H
+
+
+
+/* Number of params to dev_open() */
+#undef ENIC_DEV_OPEN_NPARAMS
+
+/* Does netdevice.h define ndo_add_vxlan_port? */
+#undef ENIC_HAVE_ADD_VXLAN_PORT
+
+/* Does netdevice.h define call_netdevice_notifiers? */
+#undef ENIC_HAVE_CALL_NETDEVICE_NOTIFIER
+
+/* Does workqueue.h define cancel_work_sync? */
+#undef ENIC_HAVE_CANCEL_WORK_SYNC
+
+/* Does cpumask.h define cpumask_local_spread? */
+#undef ENIC_HAVE_CPUMASK_LOCAL_SPREAD
+
+/* Does netdevice.h define ndo_del_vxlan_port? */
+#undef ENIC_HAVE_DEL_VXLAN_PORT
+
+/* Does ethtool.h define ethtool_ops_ext? */
+#undef ENIC_HAVE_ETHTOOL_OPS_EXT
+
+/* Does flow_dissector.h define struct flow_dissector_key_ports? */
+#undef ENIC_HAVE_FLOW_DISSECTOR_KEY_PORTS_STRUCT
+
+/* checks whether get_coalesce is defined and not deprecated */
+#undef ENIC_HAVE_GET_COALESCE
+
+/* Does ethtool.h define deprecated get_coalesce? */
+#undef ENIC_HAVE_GET_COALESCE_DEPRECATED
+
+/* Does ethtool.h define get_coalesce? */
+#undef ENIC_HAVE_GET_COALESCE_OP
+
+/* if ethtool_ops->get_coalesce has extack options */
+#undef ENIC_HAVE_GET_COAL_EXTACK
+
+/* checks whether get_flags is defined and not deprecated */
+#undef ENIC_HAVE_GET_FLAGS
+
+/* Does ethtool.h define deprecated get_flags? */
+#undef ENIC_HAVE_GET_FLAGS_DEPRECATED
+
+/* Does ethtool.h define get_flags? */
+#undef ENIC_HAVE_GET_FLAGS_OP
+
+/* Does ethtool.h define get_link_ksettings? */
+#undef ENIC_HAVE_GET_LINK_KSETTINGS
+
+/* if ethtool_ops->get_ringparam has extack options */
+#undef ENIC_HAVE_GET_RINGPARAM_EXTACK
+
+/* Does ethtool_ops have get_rxfh()? */
+#undef ENIC_HAVE_GET_RXFH_OPS
+
+/* Does ethtool_ops_ext have get_rxfh()? */
+#undef ENIC_HAVE_GET_RXFH_OPS_EXT
+
+/* checks whether get_rxnfc is defined and not deprecated */
+#undef ENIC_HAVE_GET_RXNFC
+
+/* Does ethtool.h define deprecated get_rxnfc? */
+#undef ENIC_HAVE_GET_RXNFC_DEPRECATED
+
+/* Does ethtool.h define get_rxnfc? */
+#undef ENIC_HAVE_GET_RXNFC_OP
+
+/* Does get_rxnfc have void rule locks? */
+#undef ENIC_HAVE_GET_RXNFC_VOID_RULE_LOCKS
+
+/* checks whether get_rx_csum is defined and not deprecated */
+#undef ENIC_HAVE_GET_RX_CSUM
+
+/* Does ethtool.h define deprecated get_rx_csum? */
+#undef ENIC_HAVE_GET_RX_CSUM_DEPRECATED
+
+/* Does ethtool.h define get_rx_csum? */
+#undef ENIC_HAVE_GET_RX_CSUM_OP
+
+/* Does ethtool.h define get_settings? */
+#undef ENIC_HAVE_GET_SETTINGS
+
+/* checks whether get_sg is defined and not deprecated */
+#undef ENIC_HAVE_GET_SG
+
+/* Does ethtool.h define deprecated get_sg? */
+#undef ENIC_HAVE_GET_SG_DEPRECATED
+
+/* Does ethtool.h define get_sg? */
+#undef ENIC_HAVE_GET_SG_OP
+
+/* Does ndo_get_stats64 have void return type? */
+#undef ENIC_HAVE_GET_STATS64_RET_VOID
+
+/* Does ethtool.h define get_stats_count? */
+#undef ENIC_HAVE_GET_STATS_COUNT
+
+/* checks whether get_tso is defined and not deprecated */
+#undef ENIC_HAVE_GET_TSO
+
+/* Does ethtool.h define deprecated get_tso? */
+#undef ENIC_HAVE_GET_TSO_DEPRECATED
+
+/* Does ethtool.h define get_tso? */
+#undef ENIC_HAVE_GET_TSO_OP
+
+/* Does ethtool.h define get_ts_info? */
+#undef ENIC_HAVE_GET_TS_INFO
+
+/* checks whether get_tx_csum is defined and not deprecated */
+#undef ENIC_HAVE_GET_TX_CSUM
+
+/* Does ethtool.h define deprecated get_tx_csum? */
+#undef ENIC_HAVE_GET_TX_CSUM_DEPRECATED
+
+/* Does ethtool.h define get_tx_csum? */
+#undef ENIC_HAVE_GET_TX_CSUM_OP
+
+/* Does netdevice.h define IFF_UNICAST_FLT? */
+#undef ENIC_HAVE_IFF_UNICAST_FLT
+
+/* Does netdevice.h define napi_complete_done? */
+#undef ENIC_HAVE_NAPI_COMPLETE_DONE
+
+/* Does napi_complete_done return a value? */
+#undef ENIC_HAVE_NAPI_COMPLETE_DONE_RET
+
+/* Does netdevice.h define ndo_open? */
+#undef ENIC_HAVE_NDO_OPEN
+
+/* Does netdevice.h define netdev_hw_addr? */
+#undef ENIC_HAVE_NDO_SET_MAC_ADDRESS
+
+/* Does netdevice.h define ndo_udp_tunnel_add/del? */
+#undef ENIC_HAVE_NDO_UDP_TUNNEL_ADD_DEL
+
+/* Does netdevice.h define netdev_for_each_mc_addr? */
+#undef ENIC_HAVE_NETDEV_FOR_EACH_MC_ADDR
+
+/* Does netdevice.h define netdev_for_each_uc_addr? */
+#undef ENIC_HAVE_NETDEV_FOR_EACH_UC_ADDR
+
+/* Does netdev_for_each_uc_addr have arg hardware address? */
+#undef ENIC_HAVE_NETDEV_FOR_EACH_UC_ADDR_HA_ARG
+
+/* Does netdevice.h define hw_features? */
+#undef ENIC_HAVE_NETDEV_HW_FEATURES
+
+/* Does netdevice.h define netdev_rss_key_fill? */
+#undef ENIC_HAVE_NETDEV_RSS_KEY_FILL
+
+/* Does netdevice.h define netdev_uc_count? */
+#undef ENIC_HAVE_NETDEV_UC_COUNT
+
+/* Does netdevice.h define netdev_xxx_once() logging fns? */
+#undef ENIC_HAVE_NETDEV_XXX_ONCE
+
+/* checks whether NETIF_F_GSO_UDP_TUNNEL is defined or not */
+#undef ENIC_HAVE_NETIF_F_GSO_UDP_TUNNEL
+
+/* Does netdevice.h define NETIF_F_GSO_UDP_TUNNEL? */
+#undef ENIC_HAVE_NETIF_F_GSO_UDP_TUNNEL_NETDEV
+
+/* Does netdevice_features.h define NETIF_F_GSO_UDP_TUNNEL? */
+#undef ENIC_HAVE_NETIF_F_GSO_UDP_TUNNEL_NETDEV_FEATURES
+
+/* checks whether NETIF_F_RXHASH is defined or not */
+#undef ENIC_HAVE_NETIF_F_RXHASH
+
+/* Does netdevice.h define NETIF_F_RXHASH? */
+#undef ENIC_HAVE_NETIF_F_RXHASH_NETDEV
+
+/* Does netdev_features.h define NETIF_F_RXHASH? */
+#undef ENIC_HAVE_NETIF_F_RXHASH_NETDEV_FEATURES
+
+/* Does netdevice.h define net_device_ops? */
+#undef ENIC_HAVE_NET_DEVICE_OPS
+
+/* Does pci.h define pci_set_drvdata? */
+#undef ENIC_HAVE_PCI_SET_DRVDATA
+
+/* Does kernel have pci_zalloc_consistent? */
+#undef ENIC_HAVE_PCI_ZALLOC_IN_ASM_GENERIC
+
+/* Does kernel have pci_zalloc_consistent? */
+#undef ENIC_HAVE_PCI_ZALLOC_IN_LINUX
+
+/* Does ndo_vlan_rx_add_vid have a proto member? */
+#undef ENIC_HAVE_PROTO_IN_NDO_VLAN_RX_ADD_VID
+
+/* Does ndo_vlan_rx_kill_vid have a proto member? */
+#undef ENIC_HAVE_PROTO_IN_NDO_VLAN_RX_KILL_VID
+
+/* checks whether set_coalesce is defined and not deprecated */
+#undef ENIC_HAVE_SET_COALESCE
+
+/* Does ethtool.h define deprecated set_coalesce? */
+#undef ENIC_HAVE_SET_COALESCE_DEPRECATED
+
+/* Does ethtool.h define set_coalesce? */
+#undef ENIC_HAVE_SET_COALESCE_OP
+
+/* checks whether set_flags is defined and not deprecated */
+#undef ENIC_HAVE_SET_FLAGS
+
+/* Does ethtool.h define deprecated set_flags? */
+#undef ENIC_HAVE_SET_FLAGS_DEPRECATED
+
+/* Does ethtool.h define set_flags? */
+#undef ENIC_HAVE_SET_FLAGS_OP
+
+/* Does netdevice.h define SET_MODULE_OWNER? */
+#undef ENIC_HAVE_SET_MODULE_OWNER
+
+/* Does netdevice.h define ndo_set_multicast_list? */
+#undef ENIC_HAVE_SET_MULTICAST_LIST
+
+/* checks whether set_rx_csum is defined and not deprecated */
+#undef ENIC_HAVE_SET_RX_CSUM
+
+/* Does ethtool.h define deprecated set_rx_csum? */
+#undef ENIC_HAVE_SET_RX_CSUM_DEPRECATED
+
+/* Does ethtool.h define set_rx_csum? */
+#undef ENIC_HAVE_SET_RX_CSUM_OP
+
+/* Does netdevice.h define set_rx_mode? */
+#undef ENIC_HAVE_SET_RX_MODE
+
+/* checks whether set_sg is defined and not deprecated */
+#undef ENIC_HAVE_SET_SG
+
+/* Does ethtool.h define deprecated set_sg? */
+#undef ENIC_HAVE_SET_SG_DEPRECATED
+
+/* Does ethtool.h define set_sg? */
+#undef ENIC_HAVE_SET_SG_OP
+
+/* checks whether set_tso is defined and not deprecated */
+#undef ENIC_HAVE_SET_TSO
+
+/* Does ethtool.h define deprecated set_tso? */
+#undef ENIC_HAVE_SET_TSO_DEPRECATED
+
+/* Does ethtool.h define set_tso? */
+#undef ENIC_HAVE_SET_TSO_OP
+
+/* checks whether set_tx_csum is defined and not deprecated */
+#undef ENIC_HAVE_SET_TX_CSUM
+
+/* Does ethtool.h define deprecated set_tx_csum? */
+#undef ENIC_HAVE_SET_TX_CSUM_DEPRECATED
+
+/* Does ethtool.h define set_tx_csum? */
+#undef ENIC_HAVE_SET_TX_CSUM_OP
+
+/* Does flow_dissector.h define skb_flow_dissect_flow_keys? */
+#undef ENIC_HAVE_SKB_FLOW_DISSECT_FLOW_KEYS
+
+/* Does skbuff.h define skb_tx_timestamp? */
+#undef ENIC_HAVE_SKB_TX_TIMESTAMP
+
+/* Does ethtool.h define supported_coalesce_params? */
+#undef ENIC_HAVE_SUPP_COAL_PARAMS
+
+/* if ndo_tx_timeout() supports txqueue parameter */
+#undef ENIC_HAVE_TXQUEUE_IN_NDO_TX_TIMEOUT
+
+/* Does if_vlan.h define vlan_group? */
+#undef ENIC_HAVE_VLAN_GROUP
+
+/* Does ndo_vlan_rx_add_vid return an int? */
+#undef ENIC_HAVE_VLAN_RX_ADD_VID_RET_TYPE_INT
+
+/* Does ndo_vlan_rx_kill_vid return an int? */
+#undef ENIC_HAVE_VLAN_RX_KILL_VID_RET_TYPE_INT
+
+/* Does netdevice.h define ndo_vlan_rx_register? */
+#undef ENIC_HAVE_VLAN_RX_REGISTER
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <linux/crash_dump.h> header file. */
+#undef HAVE_LINUX_CRASH_DUMP_H
+
+/* Define to 1 if you have the <linux/ethtool.h> header file. */
+#undef HAVE_LINUX_ETHTOOL_H
+
+/* Define to 1 if you have the <linux/netdevice.h> header file. */
+#undef HAVE_LINUX_NETDEVICE_H
+
+/* Define to 1 if you have the <linux/printk.h> header file. */
+#undef HAVE_LINUX_PRINTK_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <net/flow_dissector.h> header file. */
+#undef HAVE_NET_FLOW_DISSECTOR_H
+
+/* Define to 1 if you have the <net/flow_keys.h> header file. */
+#undef HAVE_NET_FLOW_KEYS_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* defines sles patchlevel if building for a SLES distro */
+#undef SLES_PATCHLEVEL
+
+/* defines sles version if building for a SLES distro */
+#undef SLES_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Extra KCFLAGS from VIC_CHECK_GCC_RETPOLINE */
+#undef VIC_EXTRA_KCFLAGS
+
+/* Does netdevice.h define ndo_add_vxlan_port? */
+#undef VIC_HAVE_ADD_VXLAN_PORT
+
+/* Whether we have declaration alloc_etherdev_mqs in <alloc_etherdev_mqs> or
+   not */
+#undef VIC_HAVE_ALLOC_ETHERDEV_MQS
+
+/* Does cpumask.h define cpumask_set_cpu? */
+#undef VIC_HAVE_CPUMASK_SET_CPU
+
+/* Whether <linux/crash_dump.h> exists or not */
+#undef VIC_HAVE_CRASH_DUMP_H
+
+/* Whether we have member struct sk_buff.csum_offset in <linux/skbuff.h> or
+   not */
+#undef VIC_HAVE_CSUM_OFFSET
+
+/* Does pci.h define DEFINE_PCI_DEVICE_TABLE? */
+#undef VIC_HAVE_DEFINE_PCI_DEVICE_TABLE
+
+/* Does etherdevice.h define ether_addr_equal? */
+#undef VIC_HAVE_ETHER_ADD_EQUAL
+
+/* Whether <linux/ethtool.h> exists or not */
+#undef VIC_HAVE_ETHTOOL_H
+
+/* Whether we have member struct net_device_extended.min_mtu in
+   <linux/netdevice.h> or not */
+#undef VIC_HAVE_EXTENDED_MIN_MAX_MTU
+
+/* Whether we have member struct net_device_ops_extended.ndo_change_mtu in
+   <linux/netdevice.h> or not */
+#undef VIC_HAVE_EXTENDED_NDO_CHANGE_MTU
+
+/* Does netdevice.h define ndo_features_check? */
+#undef VIC_HAVE_FEATURES_CHECK
+
+/* Whether <net/flow_dissector.h> exists or not */
+#undef VIC_HAVE_FLOW_DISSECTOR_H
+
+/* Whether <net/flow_keys.h> exists or not */
+#undef VIC_HAVE_FLOW_KEYS_H
+
+/* Does workqueue.h define INIT_WORK? */
+#undef VIC_HAVE_INIT_WORK
+
+/* Does ip.h define ip_hdr? */
+#undef VIC_HAVE_IP_HDR
+
+/* Does interrupt.h define irqreturn_t typedef? */
+#undef VIC_HAVE_IRQRETURN_T_TYPEDEF
+
+/* Does interrupt.h define irq_set_affinity_hint? */
+#undef VIC_HAVE_IRQ_SET_AFFINITY_HINT
+
+/* Does slab.h define kzalloc? */
+#undef VIC_HAVE_KZALLOC
+
+/* Does hlist_for_each_entry have pos arg? */
+#undef VIC_HAVE_LIST_FOR_EACH_ENTRY_POS_ARG
+
+/* Does hlist_for_each_entry_safe have tpos arg? */
+#undef VIC_HAVE_LIST_FOR_EACH_ENTRY_SAFE_POS_ARG
+
+/* Does skbuff.h define napi_consume_skb? */
+#undef VIC_HAVE_NAPI_CONSUME_SKB
+
+/* Does napi_gro_flush has flush_old arg? */
+#undef VIC_HAVE_NAPI_GRO_FLUSH_HAS_FLUSH_OLD_ARG
+
+/* Does netdevice.h define napi_schedule_irqoff? */
+#undef VIC_HAVE_NAPI_SCHEDULE_IRQOFF
+
+/* Does netdevice.h define napi_struct? */
+#undef VIC_HAVE_NAPI_STRUCT
+
+/* Whether we have member struct net_device_ops.ndo_get_stats64 in
+   <linux/netdevice.h> or not */
+#undef VIC_HAVE_NDO_GET_STATS64
+
+/* Does skbuff.h define netdev_alloc_skb? */
+#undef VIC_HAVE_NETDEV_ALLOC_SKB
+
+/* Does skbuff.h define netdev_alloc_skb_ip_align? */
+#undef VIC_HAVE_NETDEV_ALLOC_SKB_IP_ALIGN
+
+/* Does netdevice.h define netdev_err? */
+#undef VIC_HAVE_NETDEV_ERR
+
+/* Does netdevice.h define VIC_HAVE_NETDEV_EXTENDED? */
+#undef VIC_HAVE_NETDEV_EXTENDED
+
+/* Does netdevice.h define netdev_for_each_mc_addr? */
+#undef VIC_HAVE_NETDEV_FOR_EACH_MC_ADDR
+
+/* Does netdev_for_each_mc_addr have arg hardware address? */
+#undef VIC_HAVE_NETDEV_FOR_EACH_MC_ADDR_HA_ARG
+
+/* Does netdevice.h define netdev_get_tx_queue? */
+#undef VIC_HAVE_NETDEV_GET_TX_QUEUE
+
+/* Whether we have member struct net_device.min_mtu in <linux/netdevice.h> or
+   not */
+#undef VIC_HAVE_NETDEV_MIN_MAX_MTU
+
+/* Does netdevice.h define netdev_name? */
+#undef VIC_HAVE_NETDEV_NAME
+
+/* Whether we have member struct net_device.trans_start in <linux/netdevice.h>
+   or not */
+#undef VIC_HAVE_NETDEV_TRANS_START
+
+/* checks whether NETIF_F_HW_VLAN_CTAG_RX is defined or not */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_RX
+
+/* Does netdevice.h define NETIF_F_HW_VLAN_CTAG_RX? */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_RX_NETDEV
+
+/* Does netdev_features.h define NETIF_F_HW_VLAN_CTAG_RX? */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_RX_NETDEV_FEATURES
+
+/* checks whether NETIF_F_HW_VLAN_CTAG_TX is defined or not */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_TX
+
+/* Does netdevice.h define NETIF_F_HW_VLAN_CTAG_TX? */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_TX_NETDEV
+
+/* Does netdev_features.h define NETIF_F_HW_VLAN_CTAG_TX? */
+#undef VIC_HAVE_NETIF_F_HW_VLAN_CTAG_TX_NETDEV_FEATURES
+
+/* Does netdevice.h define netif_set_real_num_rx_queues? */
+#undef VIC_HAVE_NETIF_SET_REAL_NUM_RX_QUEUES
+
+/* Does netdevice.h define netif_set_real_num_tx_queues? */
+#undef VIC_HAVE_NETIF_SET_REAL_NUM_TX_QUEUES
+
+/* Does netdevice.h define netif_set_xps_queue? */
+#undef VIC_HAVE_NETIF_SET_XPS_QUEUE
+
+/* Does netdevice.h define netif_tx_queue_stopped? */
+#undef VIC_HAVE_NETIF_TX_QUEUE_STOPPED
+
+/* Does netdevice.h define netif_tx_stop_queue? */
+#undef VIC_HAVE_NETIF_TX_STOP_QUEUE
+
+/* Does net.h define net_warn_ratelimited? */
+#undef VIC_HAVE_NET_WARN_RATELIMITED
+
+/* checks whether pci_dma_mapping_error have pdev arg */
+#undef VIC_HAVE_PCI_DMA_MAPPING_ERROR_PDEV
+
+/* Does pci_dma_mapping_error have pdev arg? */
+#undef VIC_HAVE_PCI_DMA_MAPPING_ERROR_PDEV1
+
+/* Does pci_dma_mapping_error have pdev arg? */
+#undef VIC_HAVE_PCI_DMA_MAPPING_ERROR_PDEV2
+
+/* Does pci.h define pci_enable_device_mem? */
+#undef VIC_HAVE_PCI_ENABLE_DEVICE_MEM
+
+/* Does pci.h define pci_enable_msix_range? */
+#undef VIC_HAVE_PCI_ENABLE_MSIX_RANGE
+
+/* kernel src have pkt_hash_types */
+#undef VIC_HAVE_PKT_HASH_TYPES
+
+/* Whether <linux/printk.h> exists or not */
+#undef VIC_HAVE_PRINTK_H
+
+/* Whether this driver was compiled with retpoline support or not */
+#undef VIC_HAVE_RETPOLINE
+
+/* Whether we have member struct net_device_ops.ndo_rx_flow_steer in
+   <linux/netdevice.h> or not */
+#undef VIC_HAVE_RX_FLOW_STEER
+
+/* Does sched.h define schedule_timeout_uninterruptible? */
+#undef VIC_HAVE_SCHEDULE_TIMEOUT_UNINTERRUPTIBLE
+
+/* Whether we have member struct sk_buff.csum_level in <linux/skbuff.h> or not
+   */
+#undef VIC_HAVE_SKBUFF_CSUM_LEVEL
+
+/* Does skbuff.h define skb_checksum_start_offset? */
+#undef VIC_HAVE_SKB_CHECKSUM_START_OFFSET
+
+/* Whether we have member struct sk_buff.csum_start in <linux/skbuff.h> or not
+   */
+#undef VIC_HAVE_SKB_CSUM_START
+
+/* Does skbuff.h define skb_frag_size? */
+#undef VIC_HAVE_SKB_FRAG_DMA_MAP
+
+/* Does skbuff.h define skb_frag_size? */
+#undef VIC_HAVE_SKB_FRAG_SIZE
+
+/* Does skbuff.h define skb_get_hash_raw? */
+#undef VIC_HAVE_SKB_GET_HASH_RAW
+
+/* Does skb_linearize have gfp_t arg? */
+#undef VIC_HAVE_SKB_LINEARIZE_GFP_ARG
+
+/* Does skbuff.h define skb_record_rx_queue? */
+#undef VIC_HAVE_SKB_RECORD_RX_QUEUE
+
+/* Does skbuff.h define skb_set_hash? */
+#undef VIC_HAVE_SKB_SET_HASH
+
+/* Does skbuff.h define skb_transport_offset? */
+#undef VIC_HAVE_SKB_TRANSPORT_OFFSET
+
+/* Does if_vlan.h define skb_vlan_tag_get? */
+#undef VIC_HAVE_SKB_VLAN_TAG_GET
+
+/* Does if_vlan.h define skb_vlan_tag_get? */
+#undef VIC_HAVE_SKB_VLAN_TAG_PRESENT
+
+/* Whether we have member struct sk_buff.xmit_more in <linux/skbuff.h> or not
+   */
+#undef VIC_HAVE_SKB_XMIT_MORE
+
+/* Does tcp.h define tcp hdr? */
+#undef VIC_HAVE_TCP_HDR
+
+/* Does tcp.h define tcp hdrlen? */
+#undef VIC_HAVE_TCP_HDRLEN
+
+/* Does __vlan_hwaccel_put_tag have a vlan_proto arg? */
+#undef VIC_HAVE_VLAN_HWACCEL_PUT_TAG_VLAN_PROTO_ARG
+
+
+#endif /* ENIC_CONFIG_H */
+

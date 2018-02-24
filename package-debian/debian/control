@@ -1,0 +1,12 @@
+Source: enic
+Section: kernel
+Priority: optional
+Maintainer: Cisco System
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, bzip2
+Standards-Version: 3.9.4
+Homepage: https://www.cisco.com
+
+Package: kmod-enic
+Architecture: amd64
+Depends: linux-image-4.19.0+1
+Description: Linux kernel enic driver for Cisco VIC ethernet NIC.

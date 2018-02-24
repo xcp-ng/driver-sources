@@ -1,0 +1,91 @@
+# the following values must be changed
+SPEC := enic.spec
+VENDOR_CODE := cisco
+VENDOR_NAME := Cisco
+LABEL = $(DRIVER_NAME)
+TEXT := Cisco VIC Ethernet NIC Driver
+
+# versioning of pack
+PACK_VERSION = $(XENSERVER_VERSION)
+PACK_BUILD = $(XENSERVER_BUILD)
+
+# versioning of kernel module RPMs
+RPM_VERSION := 4.4.0.1
+RPM_RELEASE := 930.6
+ENIC_XS_VERSION := 8.0
+
+# no changes below here
+RPMSOURCES := $(shell rpm --eval %{_sourcedir})
+RPMDIR := $(shell rpm --eval %{_rpmdir})
+ARCH := x86_64
+XENSERVER_VERSION := $(shell set -- `tr '-' ' ' </etc/redhat-release` && echo $$4)
+XENSERVER_MAJOR_MINOR_VERSION := $(shell set -- `tr '-' ' ' </etc/redhat-release` \
+				   && echo $$4 | cut -d "." -f -2)
+XENSERVER_BUILD := $(shell set -- `tr '-' ' ' </etc/redhat-release` && echo $$5)
+KERNEL_VERSION := $(subst xen,,$(shell uname -r))
+DRIVER_NAME := $(shell sed -ne 's/^Name:[ 	]*//p' $(SPEC))
+PACKAGE := package
+SUPPL_PACK := $(shell if [ -f "/usr/bin/build-supplemental-pack.sh" ];\
+                      then echo "/usr/bin/build-supplemental-pack.sh";\
+                      else echo "/usr/local/bin/build-supplemental-pack.sh"; fi)
+
+# Example RPM filenames:
+# XenServer65: enic-xen-3.10.0+2-modules-2.3.0.45-0.x86_64.rpm
+# XenServer70: enic-3.10.0+10-modules-2.3.0.45-0.x86_64.rpm
+# XenServer71: cisco-enic-xs7.1.0.137222c-4.4.0+2-modules-2.3.0.45-0.x86_64.rpm
+# XenServer72: cisco-enic-xs7.2.0-4.4.0+10-modules-2.3.0.45-0.x86_64.rpm
+
+XS_RELEASE := xs$(XENSERVER_VERSION)
+RPMS := $(DRIVER_NAME)-$(XS_RELEASE)-$(KERNEL_VERSION)-modules-$(RPM_VERSION)-$(RPM_RELEASE)
+DEBUG_RPM := $(DRIVER_NAME)-debuginfo-$(XS_RELEASE)-$(KERNEL_VERSION)-modules-$(RPM_VERSION)-$(RPM_RELEASE)
+
+ifneq ($(ENIC_XS_VERSION),)
+XS_RELEASE := $(ENIC_XS_VERSION)
+RPMS := $(DRIVER_NAME)-$(XS_RELEASE)-$(KERNEL_VERSION)-modules-$(RPM_VERSION)-$(RPM_RELEASE)
+DEBUG_RPM := $(DRIVER_NAME)-debuginfo-$(XS_RELEASE)-$(KERNEL_VERSION)-modules-$(RPM_VERSION)-$(RPM_RELEASE)
+endif
+
+RPM_FILES := $(patsubst %,$(RPMDIR)/$(ARCH)/%.$(ARCH).rpm, $(RPMS))
+DEBUG_RPM_FILES := $(patsubst %,$(RPMDIR)/$(ARCH)/%.$(ARCH).rpm, $(DEBUG_RPM))
+
+.PHONY: default clean
+
+default: build-rpms
+
+prepare: clean
+ifeq ($(XS_RELEASE), unsupported)
+	@echo "enic driver disk cannot be built for this unsupported distribution"
+	exit 1
+endif
+	mkdir -p $(RPMSOURCES)
+	cp $(DRIVER_NAME)-$(RPM_VERSION).tar.bz2 $(RPMSOURCES)
+
+build-tarball: build-rpms
+	mkdir -p $(PACKAGE)
+	cp -fp $(RPM_FILES) $(PACKAGE)
+	cd $(PACKAGE) && $(SUPPL_PACK) --output=$(shell pwd)) --vendor-code=$(VENDOR_CODE) "--vendor-name=$(VENDOR_NAME)" --label=$(LABEL) "--text=$(TEXT)" --version=$(PACK_VERSION) --build=$(PACK_BUILD) --no-iso --tarball $(patsubst %, %.$(ARCH).rpm, $(RPMS))
+
+build-rpms: prepare
+	@echo -e "\nBuilding rpms..."
+	rpmbuild -bb --define "xs_release $(XS_RELEASE)" --define "kernel_version $(KERNEL_VERSION)" --define "version $(RPM_VERSION)" --define "release $(RPM_RELEASE)" $(SPEC);
+	@for rpm in '$(RPM_FILES)'; do \
+		if [ -f $$rpm ] ; \
+		then \
+			echo -e "\n `basename $$rpm` built successfully..." ; \
+		else \
+			echo -e "\n `basename $$rpm` build failed..." ; \
+		fi \
+	done
+	mkdir rpms
+	cp -fp $(RPM_FILES) $(DEBUG_RPM_FILES) rpms
+	echo -e "\nenic rpms are available under the rpms/ directory...\n"
+
+build-srctarballs:
+	mkdir -p $(RPMSOURCES)
+	tar zcvf $(RPMSOURCES)/$(DRIVER_NAME)-$(RPM_VERSION).tar.gz $(DRIVER_NAME)-$(RPM_VERSION)
+
+clean:
+	rm -rf $(PACKAGE)
+	rm -rf rpms
+
+distclean: clean
