@@ -1,0 +1,7 @@
+%defattr(644,root,root,755)
+/lib/modules/%2-%1
+/etc/depmod.d/kmod-i40e.conf
+/usr/share/man/man7/i40e.7.gz
+/usr/share/doc/kmod-i40e-2.26.8/README
+/usr/share/doc/kmod-i40e-2.26.8/COPYING
+/usr/share/doc/kmod-i40e-2.26.8/pci.updates
