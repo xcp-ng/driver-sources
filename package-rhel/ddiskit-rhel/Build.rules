@@ -1,0 +1,117 @@
+##
+## Generic rules for building modules for driver disks
+##
+
+.PHONY:	kmods disk diskimg diskiso distclean clean cleankmods cleandiskfs \
+	cleandiskimg cleandiskiso cleanimage
+PWD = $(shell pwd)
+kmods:
+	@for KVER in $(KVERSIONS) ; \
+	do \
+		echo -e "\nBuilding modules for kernel $${KVER}..." ; \
+		if [ ! -d rpms/$(KARCH) ] ; \
+		then \
+			mkdir -p rpms/$(KARCH) ; \
+		fi ; \
+		for SUBDIR in enic ; \
+		do \
+			if [ -e $$SUBDIR/rpm/SPECS/$$SUBDIR.spec ] ; \
+			then \
+				echo -e "\nBuilding $$SUBDIR RPM...\n" ; \
+				mkdir -p $(PWD)/$$SUBDIR/rpm/BUILD ; \
+				rpmbuild --define "_topdir $(PWD)/$$SUBDIR/rpm" \
+				         --define "_rpmdir $(PWD)/rpms" \
+				         --define "debug_package %{nil}" \
+				         --define "kernel_version $${KVER}" \
+				         --define "kversion $${KVER}" \
+					 --define "kmod_rel $${KMOD_REL}" \
+				         -bb --target ${KARCH} \
+				         $(PWD)/$$SUBDIR/rpm/SPECS/$$SUBDIR.spec ; \
+			else \
+				echo -e "\nBuilding $$SUBDIR module...\n" ; \
+				$(MAKE) -C $$SUBDIR -f Makefile.build \
+				TOPDIR=$(TOPDIR) PWD=$(PWD)/$$SUBDIR \
+				KVER=$$KVER KARCH=$(KARCH) build ; \
+			fi ; \
+		done ; \
+	done
+
+disk: kmods
+	@if [ ! -d disk ] ; \
+	then \
+		mkdir disk ; \
+	fi
+	@cp src/rhdd3 disk
+	@createrepo --pretty rpms/$(KARCH)
+	@cp -ax rpms disk/rpms
+
+images:
+	@mkdir images
+
+diskimg: disk images cleandiskimg
+	@dd if=/dev/zero of=images/dd.img bs=1440k count=1
+	@if [ ! -d images/tmp ] ; \
+	then \
+		mkdir images/tmp ; \
+	fi
+	@echo -e "\nBuilding disk image (superuser authority required)..."
+	@sudo root bin/makedisk $(FSTYPE) images/dd.img images/tmp
+	@rmdir images/tmp
+	@gzip -9 images/dd.img
+	@if [ -f images/dd.img.gz ] ; \
+	then \
+		echo -e "\n...disk image written as images/dd.img.gz." ; \
+	else \
+		echo -e "\n...disk image creation failed!" ; \
+	fi
+
+diskiso: disk images cleandiskiso
+	@echo -e "\nBuilding ISO image..."
+	@mkisofs -R -o images/dd.iso disk
+	@gzip -9 images/dd.iso
+	@if [ -f images/dd.iso.gz ] ; \
+	then \
+		echo -e "\n...ISO image written as images/dd.iso.gz." ; \
+	else \
+		echo -e "\n...ISO image creation failed!" ; \
+	fi
+
+sources:
+	@while read file ; \
+	do \
+		dir=`dirname $$file` ; \
+		if [ ! -d disk/src/$$dir ] ; \
+		then \
+			mkdir -p disk/src/$$dir ; \
+		fi ; \
+		cp $$file disk/src/$$file ; \
+	done < dist
+
+distclean: clean cleanimage
+
+clean: cleandiskfs cleankmods cleanrpms
+
+cleankmods:
+	@for SUBDIR in enic ; \
+	do \
+		rm -rf $$SUBDIR/rpm/BUILD ; \
+	done
+
+cleandiskfs:
+	@rm -rf disk
+
+cleandiskimg:
+	@rm -f images/dd.img.gz
+
+cleandiskiso:
+	@rm -f images/dd.iso.gz
+
+cleanimage: cleandiskimg cleandiskiso
+	@if [ -d images ] ; \
+	then \
+		rm -rf images ; \
+	fi
+
+cleanrpms:
+	@rm -rf rpms
+	@rm -rf tmp

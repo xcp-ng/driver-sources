@@ -1,0 +1,8 @@
+#!/bin/sh
+# postinst script for kmod-usnic-verbs debian package
+
+SU=/usr/bin/sudo
+
+${SU} /sbin/depmod -a @KNAME@
+cp /boot/initrd.img-@KNAME@ /boot/initrd.img-@KNAME@.old-kmod-enic
+mkinitramfs -o /boot/initrd.img-@KNAME@ @KNAME@
