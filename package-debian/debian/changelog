@@ -1,0 +1,5 @@
+enic (4.5.0.7-939.23) unstable; urgency=low
+
+  * Initial release for Debian package on ubuntu 14.04
+
+ -- Govindarajulu Varadarajan <gvaradar@cisco.com>  Mon, 06 Apr 2015 15:12:49 -0800

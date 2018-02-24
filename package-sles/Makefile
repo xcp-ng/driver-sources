@@ -1,0 +1,140 @@
+SLES_VERSION := 0
+SLES_PATCHLEVEL := 0
+KMP_REL := sles${SLES_VERSION}sp${SLES_PATCHLEVEL}
+
+TOP_BUILD_DIR ?= ${CURDIR}
+TARGET_ARCH := $(shell uname -i)
+DRV_SRC := $(shell basename ${CURDIR})
+PKG_VER := 4.5.0.7
+PKG_REL := 939.23
+DRV_VER := 4.5.0.7-939.23
+LINUX_DISTRO_DISK := xs80
+KMP_BUILD_ROOT := ${TOP_BUILD_DIR}/var/tmp/build-root
+BUILD_ROOT := ${KMP_BUILD_ROOT}
+STAGING_DIR := ./enic-staging
+DEFAULT_FLAVOR := default
+KMP_PKG_DIR := /usr/src/packages
+ifeq (${LINUX_DISTRO_DISK}, sles11)
+	KMP_BUILD_DIR = ${KMP_BUILD_ROOT}/${KMP_PKG_DIR}/BUILD
+	KMP_RPMS_DIR  = ${KMP_BUILD_ROOT}/${KMP_PKG_DIR}/RPMS
+else
+	KMP_BUILD_DIR = ${TOP_BUILD_DIR}/var/tmp/build-root/home/abuild/rpmbuild/BUILD
+	KMP_RPMS_DIR  = ${TOP_BUILD_DIR}/var/tmp/build-root/home/abuild/rpmbuild/RPMS/
+endif
+SLES_ENIC_NAME := cisco-enic
+
+export
+
+.PHONY: all prepare clean
+
+all: prepare kmp dud
+
+# Note that the build(1) environment builds an RPM inside an chroot'ed
+# environment.  The build(1) command only lets us pass in RPMs into the
+# chroot environment, but we need several more things in order to sign
+# the resulting RPM:
+#
+# 1. We need to be able to resolve the IP name "swims.cisco.com"
+# (which is Cisco's signing infrastructure server -- i.e., the machine
+# which will generate the actual signature during the build process).
+# Since 1) the chroot environment will contain an effectively empty
+# /etc/resolv.conf, and 2) the build(1) environment absolutely will
+# not allow us to modify the /etc/ tree at all during the build
+# process, we therefore need to pre-write a BUILD_ROOT/etc/hosts file
+# (i.e., /etc/hosts in the chroot tree) before we invoke build(1).
+# build(1) will kindly not overwrite this file, so therefore we'll be
+# able to resolve swims.cisco.com during the build process.
+#
+# NOTE: Sometimes the initial "dig" for "swims.cisco.com" fails due to
+# instability in the Cisco releng VMs.  So hard-code a fallback IP
+# address (Fab 2019).  :-(
+#
+# 2. We need the entire directory where the signing script is located.
+# This tree is not included in the enic tarball.  Hence, similar to
+# above, we pre-copy the directory tree containing the SWIMS signing
+# script to BUILD_ROOT/sign.
+#
+# 3. Similar to above, we also need the SWIMS signing ticket file.
+# Also copy that to BUILD_ROOT/sign.
+#
+# After these things are written to the BUILD_ROOT, invoke the
+# build(1) command to actually create the rest of the chroot and then
+# build the RPM (which will include signing the .ko file).
+kmp: cleankmp
+	@echo -e "\nBuilding KMP..."
+	sudo mkdir -p ${KMP_BUILD_ROOT}/etc
+	mkdir rpms
+	if test -n "" -a -n ""; then \
+	    ip=`dig swims.cisco.com | egrep '^swims.cisco.com.*A.*' | awk '{ print $$5 }'`; \
+	    if test -z "$$ip"; then ip=173.36.134.27; fi; \
+	    f="${KMP_BUILD_ROOT}/etc/hosts"; \
+	    sudo mkdir -p `dirname $$f`; \
+	    sudo touch $$f; \
+	    sudo chmod 666 $$f; \
+	    sudo echo "$$ip swims.cisco.com" > $$f; \
+	    mkdir ${KMP_BUILD_ROOT}/sign; \
+	    sign_dir=`dirname `; \
+	    sudo cp -p $$sign_dir/* ${KMP_BUILD_ROOT}/sign; \
+	    sudo cp  ${KMP_BUILD_ROOT}/sign; \
+	    sudo chmod a+r ${KMP_BUILD_ROOT}/sign/*; \
+	fi
+	sudo env BUILD_ROOT=${KMP_BUILD_ROOT} build ${SLES_ENIC_NAME}.spec
+	cp -f ${KMP_RPMS_DIR}/${SLES_ENIC_NAME}*${PKG_VER}*${PKG_REL}.${TARGET_ARCH}.rpm \
+		rpms/
+
+stage_dud: cleanstaging
+	@echo -e "\Staging DUD..."
+	mkdir -p ${STAGING_DIR}/linux/suse
+	mkdir ${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}
+	mkdir ${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}/install
+	mkdir ${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}/modules
+
+	cp -f $(KMP_BUILD_DIR)/${SLES_ENIC_NAME}-${PKG_VER}/enic.ko \
+	${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}/modules/
+	cp -f ${KMP_RPMS_DIR}/${SLES_ENIC_NAME}*-${PKG_VER}*${PKG_REL}.${TARGET_ARCH}.rpm \
+	${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}/install/
+	cp -f update.post \
+	${STAGING_DIR}/linux/suse/${TARGET_ARCH}-sles${SLES_VERSION}/install/
+
+makeiso: cleandiskiso
+	@echo -e "\nBuilding ISO image..."
+	@mkdir images
+	$(SU) mkisofs -r -J -publisher "Cisco Systems" \
+	-p "Cisco VIC Ethernet NIC Engineering, \
+	https://cisco.com" -input-charset utf8 -graft-points \
+	-V enic-${KMP_REL} -o \
+	images/enic-${DRV_VER}-${KMP_REL}-dd.iso ${STAGING_DIR}
+	@if [ -f images/enic-${DRV_VER}-${KMP_REL}-dd.iso ]; \
+	then \
+		echo -e "\n...ISO image built successfully" ; \
+	else \
+		echo -e "\n...ISO image creation failed" ; \
+	fi
+
+dud: stage_dud makeiso
+
+prepare: clean
+ifeq (${KMP_REL}, unsupported)
+	@echo "enic driver disk cannot be built for this unsupported \
+	distribution"
+	exit 1
+endif
+ifeq (${LINUX_DISTRO_DISK}, sles11)
+	tar xfj ${SLES_ENIC_NAME}-${PKG_VER}.tar.bz2
+	cd ${SLES_ENIC_NAME}-${PKG_VER}
+	$(SU) rm ${SLES_ENIC_NAME}-${PKG_VER}.tar.bz2
+	tar cfj ${SLES_ENIC_NAME}-${PKG_VER}.tar.bz2 ${SLES_ENIC_NAME}-${PKG_VER}
+	$(SU) rm -rf ${SLES_ENIC_NAME}-${PKG_VER}
+endif
+
+cleanstaging:
+	$(SU) rm -rf ${STAGING_DIR}
+
+cleankmp:
+	$(SU) rm -rf rpms
+	$(SU) rm -rf ${KMP_RPMS_DIR}/${TARGET_ARCH}/*.rpm
+
+cleandiskiso:
+	$(SU) rm -rf images
+
+clean: cleankmp cleanstaging cleandiskiso

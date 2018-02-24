@@ -1,0 +1,69 @@
+%define _rpmfilename %%{NAME}-%{version}-%{release}.%%{ARCH}.rpm
+%define debug_package %{nil}
+
+# Required to support secure-boot:  Determine service-pack level.
+# From https://www.suse.com/documentation/suse-best-practices/singlehtml/sbp-kmp-manual/sbp-kmp-manual.html
+%define sle_version %(tr '\\n' ' ' < /etc/SuSE-release | sed -rn 's/^SUSE Linux Enterprise ([A-z]+) ([0-9]+).*PATCHLEVEL = ([0-9]+).*$/\\2\\3/p')
+
+Name:           cisco-enic
+License:        GPL-2.0-only
+Vendor:         Cisco
+Version:        4.5.0.7
+Release:        939.23
+Summary:	Cisco VIC Ethernet NIC Driver Update Package
+
+Group:          System/Kernel
+URL:		https://www.cisco.com/
+Source0:        %name-%version.tar.bz2
+Source1:        %{name}.files
+BuildRoot:      %(mktemp -ud %{_tmppath}/%{name}-4.5.0.7-939.23-XXXXXX)
+BuildRequires:  %kernel_module_package_buildreqs
+BuildRequires:  sles-release
+BuildRequires:  kernel-default
+BuildRequires:  python3
+
+%kernel_module_package -f %{SOURCE1}
+
+%description
+Cisco VIC Ethernet NIC Driver Update Package
+
+%prep
+%setup -n cisco-enic-4.5.0.7
+echo "enic.ko external" > Module.supported
+
+# We do not use the VIC_SWIMS_CONFIGURE_CLI_OPTIONS macro here because
+# SLES uses the build(1) system to make kernel RPMs, which does
+# everything inside a chroot.  Hence, we have to manually re-create
+# the signing options that are suitable in a chrooted environment.
+if test -n "" -a -n "@VIC_SWIMS_SIGNING_SCRIPT"; then
+    ticket_name=`basename `
+    script_name=`basename `
+    extra="--with-swims-ticket-file=/sign/$ticket_name --with-swims-signing-script=/sign/$script_name --with-swims-key-type="
+fi
+
+./configure $extra --disable-compile-without-retpoline
+
+%build
+export EXTRA_CFLAGS='-DVERSION=\"%{name}-%{version}-%{release}\"'
+
+# Use the enic Makefile here: it will use the kernel Makefile to build
+# the .ko, and then if configure selected it, the enic Makefile will
+# sign the .ko.
+num_procs=`cat /proc/cpuinfo | grep processor | wc -l`
+%{__make} -j $num_procs
+
+%install
+export INSTALL_MOD_PATH=%{buildroot}
+export INSTALL_MOD_DIR=updates
+
+# Use the kernel Makefile here because the enic Makefile runs "depmod"
+# (which we don't want/need to do here -- we're just copying the .ko
+# to the right location in the build tree so that it can be packaged).
+%{__make} -C /lib/modules/4.19.0+1/build M=$PWD modules_install
+
+%clean
+rm -rf %{buildroot}
+
+%changelog
+* Fri Oct 12 2018 Jeff Squyres <jsquyres@cisco.com>
+- Add support for digitally signing enic.ko

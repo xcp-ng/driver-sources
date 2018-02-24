@@ -1,0 +1,274 @@
+#
+# Copyright 2008-2018 Cisco Systems, Inc.  All rights reserved.
+# Copyright 2007 Nuova Systems, Inc.  All rights reserved.
+#
+# This program is free software; you may redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+KDIR=/lib/modules/4.19.0+1/build
+LINUX_DISTRO=CitrixHypervisor
+ENIC_VERSION=4.5.0.7
+ENIC_WHOLE_VERSION=4.5.0.7-939.23
+PACKAGE_NAME=enic
+LINUX_DISTRO_DISK=xs80
+VIC_EXTRA_KCFLAGS=-mindirect-branch-register -mindirect-branch=thunk-inline 
+TAR_BALL=enic-${ENIC_VERSION}.tar.bz2
+TAR_DIR=enic-${ENIC_VERSION}
+VIC_SWIMS_TICKET_FILE=
+VIC_SWIMS_KEY_TYPE=
+VIC_SWIMS_SIGNING_SCRIPT=
+VIC_SWIMS_PYTHON=
+
+# Verbosity output
+VIC_V_SIGN = $(vic__v_SIGN_$V)
+vic__v_SIGN_ = $(vic__v_SIGN_0)
+vic__v_SIGN_0 = @echo "  VIC SIGN [M]" $@;
+
+module=$(PACKAGE_NAME).ko
+
+abs_srcdir = ${M}
+abs_builddir = ${M}
+
+ccflags-y += -I$(abs_srcdir)
+obj-$(CONFIG_ENIC) += enic.o
+enic-objs := enic_main.o enic_dev.o enic_res.o enic_pp.o vnic_dev.o \
+	vnic_wq.o vnic_rq.o vnic_cq.o vnic_intr.o vnic_vic.o enic_ethtool.o \
+	enic_api.o enic_clsf.o enic_qp.o enic_clock.o
+
+CPPFLAGS += $(addprefix -I ,$(INCLUDE_DIRECTORIES))
+ccflags-y := $(ccflags-y) $(CPPFLAGS) $(VIC_EXTRA_KCFLAGS)
+
+CORE_SOURCE_FILES := \
+	vnic_resource.h \
+	vnic_devcmd.h \
+	vnic_enet.h \
+	vnic_dev.c \
+	vnic_dev.h \
+	vnic_wq.c \
+	vnic_wq.h \
+	vnic_rq.c \
+	vnic_rq.h \
+	vnic_cq.c \
+	vnic_cq.h \
+	vnic_intr.c \
+	vnic_intr.h \
+	vnic_vic.c \
+	vnic_vic.h \
+	vnic_stats.h \
+	vnic_nic.h \
+	vnic_rss.h \
+	wq_enet_desc.h \
+	rq_enet_desc.h \
+	cq_enet_desc.h \
+	cq_desc.h \
+	enic_res.c \
+	enic_res.h \
+	enic_dev.c \
+	enic_dev.h \
+	enic_clsf.c \
+	enic_clsf.h \
+	enic_ethtool.c \
+	enic_ethtool.h \
+	enic_main.c \
+	enic.h \
+	enic_api.h \
+	driver_utils.h \
+	enic_api.c \
+	enic_pp.c \
+	enic_pp.h \
+	enic_qp.h \
+	enic_qp.c \
+	enic_trace.h \
+	enic_clock.c \
+	enic_clock.h \
+	kcompat.h
+
+AUTOGEN_FILES := \
+	config/config.guess \
+	config/config.sub \
+	config/install-sh
+
+AUTOCONF_SRC_FILES := \
+	configure.ac \
+	aclocal.m4 \
+	vic-common.m4 \
+	Makefile.in \
+	package-rhel/enic.spec.in \
+	enic_config.h.in \
+	kcompat_config.h.in \
+	package-rhel/ddiskit/Makefile.in \
+	package-sles/Makefile.in \
+	package-sles/cisco-enic.spec.in \
+	package-debian/debian/changelog.in \
+	package-xs/Makefile.in \
+	package-xs/enic.spec.in \
+	package-debian/debian/control.in \
+	package-debian/debian/postinst.in \
+	package-debian/debian/postrm.in \
+	package-debian/debian/rules.in
+
+EXTRA_DIST := \
+	README \
+	LICENSE \
+	KNOWN_ISSUES \
+	version.sh \
+	make_package.sh \
+	package-rhel/enic.conf \
+	package-rhel/enic.files \
+	package-rhel/ddiskit-rhel/Build.rules \
+	package-rhel/ddiskit-rhel/bin/makedisk \
+	package-rhel/ddiskit-rhel/disk/rhdd3 \
+	package-rhel/ddiskit-rhel/src/rhdd3 \
+	package-rhel/ddiskit/modules.dep \
+	package-sles/update.post \
+	package-debian/ChangeLog \
+	package-debian/Makefile \
+	package-debian/debian/compat \
+	package-debian/debian/copyright \
+
+CLEANFILES := \
+	*.o .*.cmd *.ko *.ko.unsigned \
+	enic.mod.c \
+	Module.symvers \
+	${TAR_BALL} \
+	${TAR_DIR}
+
+DISTCLEAN_FILES := \
+	Makefile \
+	config.log \
+	config.status \
+	enic_config.h \
+	kcompat_config.h \
+	make_package.sh \
+	package-rhel/enic.spec \
+	package-rhel/ddiskit/Makefile \
+	package-sles/Makefile \
+	package-sles/cisco-enic.spec \
+	package-debian/debian/changelog \
+	package-xs/Makefile \
+	package-xs/enic.spec \
+	.tmp_versions
+
+WDIR := $(shell pwd)
+
+SRC_TAR_FILES := \
+	${AUTOGEN_FILES} \
+	${CORE_SOURCE_FILES} \
+	${EXTRA_DIST} \
+	configure
+
+.PHONY: default
+default: all
+
+.PHONY: all
+all: modules
+
+.PHONY: modules
+modules: $(module)
+
+# Makes sym links for VPATH builds
+.PHONY: src_symlinks
+src_symlinks:
+	@ if test $(abs_srcdir) != $(abs_builddir); then \
+		for f in $(SRC_TAR_FILES); do \
+			dir=$$(dirname $$f); \
+			if test -n "$$dir"; then \
+				mkdir -p $(abs_builddir)/$$dir; \
+			fi; \
+			if test ! -r $$f; then \
+				ln -sf $(abs_srcdir)/$$f $(abs_builddir)/$$f; \
+			fi; \
+		done; \
+	fi
+
+$(SRC_TAR_FILES): src_symlinks
+
+$(module): ${SRC_TAR_FILES}
+	$(MAKE) -C ${KDIR} M=${WDIR} modules
+	@if test -n "$(VIC_SWIMS_TICKET_FILE)"; then \
+	    $(MAKE) vic-sign; \
+	fi
+
+.PHONY: vic-sign
+vic-sign:
+	@if test -z "$(VIC_SWIMS_SIGNING_SCRIPT)"; then \
+	     echo "This build not configured for signing support."; \
+	     exit 1; \
+	fi
+	@rm -f $(module).signed
+	$(VIC_V_SIGN) \
+	 dir=`readlink -f $(VIC_SWIMS_SIGNING_SCRIPT)`; \
+	 dir=`dirname $$dir`; \
+	 export PYTHONPATH=$$dir:$$PYTHONPATH; \
+	 $(VIC_SWIMS_PYTHON) $(VIC_SWIMS_SIGNING_SCRIPT) \
+		--ImageName=$(module) \
+		--TicketFile=$(VIC_SWIMS_TICKET_FILE) \
+		--KeyType=$(VIC_SWIMS_KEY_TYPE)
+	@mv $(module).signed $(module)
+
+.PHONY: install
+install:
+	$(MAKE) -C ${KDIR} M=${WDIR} modules_install
+	sudo /sbin/depmod -a >/dev/null
+
+.PHONY: package
+package: dist
+	${WDIR}/make_package.sh ${LINUX_DISTRO_DISK} ${ENIC_WHOLE_VERSION} \
+	4.19.0+1
+
+.PHONY: clean
+clean:
+	rm -rf ${CLEANFILES} &> /dev/null
+
+.PHONY: packclean
+packclean:
+	rm -rf	enic-${ENIC_VERSION}-${LINUX_DISTRO_DISK} \
+	enic-${ENIC_VERSION}-${LINUX_DISTRO_DISK}.tar.bz2
+
+.PHONY: distclean
+distclean: clean packclean
+	rm -rf ${DISTCLEAN_FILES} &> /dev/null
+
+.PHONY: help
+help:
+	@echo 'Targets'
+	@echo '-------------------------------------------------------------------------------'
+	@echo '  all			- Build enic.ko'
+	@echo '  install		- Install enic.ko'
+	@echo '  dist	         	- Build source tarball'
+	@echo '  package	        - Build enic rpm and iso'
+	@echo '  clean			- Remove all compiled files'
+	@echo '  distclean		- Make tree just like it was extracted from tarball'
+	@echo '-------------------------------------------------------------------------------'
+
+.PHONY: dist
+dist:
+	rm -rf ${TAR_BALL} ${TAR_DIR}
+	mkdir -p ${TAR_DIR}
+	@for f in ${SRC_TAR_FILES} ${AUTOCONF_SRC_FILES}; do \
+		dir=$$(dirname $$f); \
+		file=$$(basename $$f); \
+		if test -n $$dir; then \
+			mkdir -p ${TAR_DIR}/$$dir; \
+		fi;\
+		if test ! -e ${TAR_DIR}/$$dir/$$f; then \
+			cp $$f ${TAR_DIR}/$$dir; \
+		fi \
+	done
+	cd ${TAR_DIR}; \
+	rm -f ${CLEANFILES}; \
+	sed -i \
+	    -e '/\[Insert appropriate license here/r LICENSE' \
+	    -e '/\[Insert appropriate license here/d' ${SRC_TAR_FILES} kcompat_config.h.in
+	tar cmjf ${TAR_BALL} ${TAR_DIR}
+	rm -rf ${TAR_DIR}
