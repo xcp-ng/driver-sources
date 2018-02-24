@@ -1,0 +1,13 @@
+#! /bin/sh
+#
+# update.post
+#
+# This script is required due to a bug in rpm in which `rpm -ihv *.rpm'
+# won't install anything if one of the rpms fails.  `yast -i *.rpm'
+# installs just the required kmp rpm. (gmonroy Nov 2006)
+
+echo -e "`date` :\tbegin update.post" >> /tmp/DUD.log
+pushd `dirname $0`
+for p in *.rpm; do rpm -Uv $p; done
+popd
+echo -e "`date` :\tend update.post" >> /tmp/DUD.log

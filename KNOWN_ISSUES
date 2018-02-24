@@ -1,0 +1,97 @@
+Linux Driver for Cisco Systems Inc. VIC Ethernet NIC
+====================================================
+
+Known Issues
+============
+
+Multiple Interfaces on Same Ethernet Broadcast Network
+------------------------------------------------------
+Due to the default ARP behavior on Linux, it is not possible to have
+one system on two IP networks in the same Ethernet broadcast domain
+(non-partitioned switch) behave as expected.  All Ethernet interfaces
+will respond to IP traffic for any IP address assigned to the system.
+This results in unbalanced receive traffic.
+
+If you have multiple interfaces in a server, turn on ARP
+filtering by entering:
+
+    net.ipv4.conf.all.arp_filter = 1
+
+to the file /etc/sysctl.conf and restart the system.
+
+
+__tmpXXX Interface Names
+------------------------
+Redhat distributions include a udev helper to rename network devices
+based on information found in /etc/sysconfig/network-scripts/ifcfg-eth
+configuration files.  A device can be renamed if there is a ifcfg-eth
+file with a HWADDR field that matches the device's MAC address.  If a
+device already exists with the target name, the existing device
+is renamed __tmpXXX, where XXX is a random number.  It is assumed that
+the renamed __tmpXXX device would also have a matching ifcfg-eth file
+and would therefore be renamed again to match the DEVICE name in
+ifcfg-eth.  Any leftover __tmpXXX devices is an indication that there
+is a problem with the ifcfg-eth files and is fixed by assigning each
+device with an ifcfg-eth file with the correct MAC address in the 
+HWADDR field.
+
+
+Configured Interfaces Don't Come Up
+-----------------------------------
+On Redhat distributions, changing the device names in the ifcfg-eth 
+files may result in a mismatch between the kernel assigned interface 
+names and the ones in the ifcfg-eth files and unexpected things may 
+happen. One such known issue is that some of the interfaces fail to 
+come up on loading the driver.
+
+
+Setting Interrupt Coalesce Timer for Interfaces
+-----------------------------------------------
+For those interfaces running in MSI/Legacy interrupt mode, the interrupt
+vector for the transmit and receive queues is the same. Hence there is a
+restriction on the way we set the interrupt coalesce timer values for such
+interfaces. Both tx-usecs and rx-usecs have to set with the same value.
+
+$ethtool -C ethx tx-usecs=y rx-usecs=y
+
+There is no such restriction for the interfaces in MSI-X mode
+
+$ethtool -C ethx tx-usecs=y rx-usecs=z
+
+
+Iperf multicast UDP test dropped packets
+----------------------------------------
+Under UDP stress test, The Linux system may drop UDP packets due to not 
+enough socket receive buffers. These drops show up under receive errors 
+in 'netstat -su' output. 
+
+You can increase the Linux kernel's default socket buffer sizes for UDP by 
+increasing the values in /proc/sys/net/core/rmem_default and rmem_max.
+For the new values to persist across reboots you will have to add it to 
+/etc/sysctl.conf
+
+IP_ADD_MEMBERSHIP failures
+--------------------------
+On a Linux host, the max no. of multicast groups that the host interfaces
+can subscribe to is defined in /proc/sys/net/ipv4/igmp_max_memberships,
+with a default value of 20. Exceeding this limit can cause any service that
+does multicast registrations on host interfaces run into IP_ADD_MEMBERSHIP
+failures.
+
+One such example is the avahi-daemon service on Linux distributions. On enic 
+driver load, avahi-daemon registers the IPv4 mNDS multicast group on every 
+interface. When there are large no. of interfaces, there is a possibility of
+exceeding the igmp_max_memberships limit. In such a case, avahi-daemon fails 
+to join mDNS multicast groups on one or more interfaces. The following error 
+messages appear in /var/log/messages.
+
+avahi-daemon: Joining mDNS multicast group on interface ethX.IPv4 with address Y
+avahi-daemon: IP_ADD_MEMBERSHIP failed: No buffer space available
+
+The solution is to increase the limit in /proc/sys/net/ipv4/igmp_max_memberships
+
+For immediate effect:
+	#echo xxx > /proc/sys/net/ipv4/igmp_max_memberships
+or
+For persistence across reboots: 
+	Add to /etc/sysctl.conf and reboot host

@@ -1,0 +1,426 @@
+Linux Driver for Cisco Systems Inc. VIC Ethernet NIC
+====================================================
+
+Enic is the Linux driver for the Cisco Systems Inc. VIC Ethernet NIC.
+
+See the KNOWN_ISSUES file for known issues with this release.
+
+See the LICENSE file for license information.
+
+
+Supported Platforms and Distributions
+=====================================
+
+The enic driver is supported on a variety of hardware platforms and
+Linux distributions.  Please see the Cisco UCS Hardware Compatibility
+List (HCL) for a list of compatible hardware and Linux distributions:
+
+    https://ucshcltool.cloudapps.cisco.com/public/
+
+Note that Cisco only tests the binary distribution of this driver
+against GA releases of Linux distributions.  Meaning: if you upgrade
+your Linux kernel beyond the kernel version from the GA version of
+your Linux distribution, this driver may no longer work.
+
+If you need to upgrade your kernel beyond the GA version, you may be
+able to compile this driver from source, but that takes a bit more
+knowledge and skill.
+
+Finally, note that -- by default -- UEFI Secure Boot is only supported
+with the binary driver packages distributed from cisco.com.  If you
+compile this driver from source, it will not support UEFI Secure Boot
+unless you sign the driver and add the appropriate validation into the
+boot sequence.  See below for more information about UEFI Secure Boot.
+
+
+Installation
+============
+
+The inbox enic driver in many Linux distributions is suitable for most
+uses.  However, updated enic drivers may be available for download
+from Cisco.com (in both binary and source code form).  These updated
+enic drivers can be installed in several different ways:
+
+1. Binary package (RPM)
+2. Binary package (deb)
+3. ISO image
+4. Source code tarball
+
+Instructions for each of these installation methods are described
+below.  After the driver has been installed, you need to load it, and
+then verify that it is running.  See instructions for each of these
+steps below.
+
+
+SLES Note
+---------
+
+SLES has inbox versions of both the Cisco enic Linux kernel driver and
+the Cisco usNIC Linux kernel driver.  These two drivers are
+interdependent upon each other; if you upgrade one, you must upgrade
+both.  For example, if you only upgrade enic, the SLES kernel
+dependency checker will determine that the new enic driver breaks the
+inbox usNIC driver, and therefore it will ignore the new enic driver
+(and use the inbox enic and usNIC drivers).
+
+Each of the installation methods below will include a special note
+about how to install both the enic and usNIC drivers on SLES.
+
+This situation does not occur in other supported Linux distributions.
+
+
+Install: Binary package (RPM)
+-----------------------------
+
+1) Verify that your running kernel matches one of the supported
+distributions listed in the HCL.  For example, you can use the "uname
+-r" command to see the version of your running kernel and verify it
+against the kernel version in the RPM filename / metadata that you
+wish to use.
+
+If kernel version does not match, the enic RPM may not be able to be
+installed.
+
+2) Install the enic RPM (requires administrative privileges):
+
+   Red Hat Enterprise Linux (RHEL):
+   # rpm -ihv kmod-enic-<version>-<release>.<distro>.x86_86.rpm
+
+   SuSE Linux Enterprise Server (SLES):
+   # rpm -ivh cisco-enic-usnic-kmp-default-<version>-<release>.x86_64.rpm
+
+   Note that the SLES RPMs are a "combo" RPM containing updated
+   versions of both the enic and usNIC drivers.  Installing this RPM
+   will upgrade *both* drivers simultaneously.
+
+   XenServer:
+   # rpm -ivh enic-<kernel_version>-modules-<version>-<release>.x86.rpm
+   # rpm -ivh enic-debuginfo-<version>.x86.rpm
+     (optional for debuginfo support)
+
+   CentOS:
+   # rpm -ihv kmod-enic-<version>-<release>.<distro>.x86_86.rpm
+
+NOTE: If the install fails because a previous version of enic RPM was
+      installed, use the rpm -Uhv <rpm_file_name> command to do an RPM
+      update.
+
+At this point the driver is installed but not loaded in the running
+kernel.
+
+The RPM can be uninstalled using the "-e" option (requires
+administrative privileges):
+
+   Red Hat Enterprise Linux (RHEL):
+   # rpm -e kmod-enic
+
+   SuSE Linux Enterprise Server (SLES):
+   # rpm -e cisco-enic-usnic-kmp-default
+
+   Xen Server:
+   # rpm -e enic-<version>
+
+NOTE: Be sure that you are not connected to the server via an enic
+      interface, or your session will be severed.  You may wish to
+      execute this command either on the console or in a KVM session,
+      for example.
+
+
+Install: Binary package (deb)
+-----------------------------
+
+1) Verify that your running kernel matches one of the supported
+distributions listed in the HCL.  For example, you can use the "uname
+-r" command to see the version of your running kernel and verify it
+against the kernel version in the DEB filename / metadata that you
+wish to use.
+
+If kernel version does not match, the enic DEB may not be able to be
+installed.
+
+2) Install the enic DEB (requires administrative privileges):
+
+   Ubuntu:
+   # dpkg -i kmod-enic_<kernel_version>-<version>-<release>_amd64.deb
+
+At this point the driver is installed but not loaded in the running
+kernel.
+
+The DEB can be uninstalled using the "-r" option (requires
+administrative privileges):
+
+   Ubuntu:
+   # dpkg -r kmod-enic
+
+NOTE: Be sure that you are not connected to the server via an enic
+      interface, or your session will be severed.  You may wish to
+      execute this command either on the console or in a KVM session,
+      for example.
+
+
+Install: ISO image
+------------------
+
+In some cases, it is useful to install an ISO 9660 CD-ROM file system
+image during a Linux distribution installation in order to have the
+most recent enic driver immediately upon first boot.
+
+The driver ISO image must be built on a system with the same Linux
+distribution and version as the target.
+
+1) Prerequisites:
+  1.1) Red Hat:
+  The target build system must have createrepo RPM and kernel-*-devel
+  RPMs installed.
+
+  1.2) SLES:
+  - The SLES driver disk build needs the SLES Linux RPMs (install
+    DVD1) and SLES SDK to create the build system.
+
+  - The SLES SDK can be downloaded from:
+    http://developer.novell.com/wiki/index.php/SLES_SDK
+
+  - The target build system must have the following RPMs installed:
+    - build RPM (from SLES SDK)
+    - kernel-*-devel RPMs
+
+  - The default locations for RPMS as seen by the build scripts are:
+    - SLES install DVD1 contents available under /media/dvd/sles
+    - SLES install sdk contents available under /media/dvd/sles_sdk
+
+  - Example Commands to loop mount the SLES ISOs:
+    # mkdir -p /media/dvd/sles /media/dvd/sles_sdk
+    # mount -o loop SLES-11-SP1-DVD-x86_64-GM-DVD1.iso /media/dvd/sles
+    # mount -o loop SLE-11-SP1-SDK-DVD-x86_64-GM-DVD1.iso /media/dvd/sles_sdk
+
+  - The above mentioned default locations can be overridden by setting the
+    BUILD_RPMS environment variable. BUILD_RPMS must be set to locations of
+    both SLES RPMS and SLES SDK.
+    - Example (for bash):
+    # export BUILD_RPMS=/media/dvd/mySuSE:/media/dvd/mySuSESDK
+
+  1.3) XenServer:
+  The target build system is a XenServer DDK (Driver Development Kit)
+  VM that provides the necessary compile infrastructure to build
+  driver disks or supplement packs. It is required to use a DDK VM
+  that corresponds to the build of the XenServer that the drivers will
+  be targeted at. This is the only way supported by Citrix for
+  building drivers for XenServer.
+
+  Process for setting up DDK VM:
+  a) Obtain matching XenServer product and DDK build ISOs from
+     http://citrix.com/English/ss/downloads/
+  b) Install XenServer onto a host server.
+  c) Install the XenCenter administrator console onto a Windows-based
+     machine.
+  d) Use XenCenter to import the DDK onto the XenServer host as a new
+     virtual machine.
+
+2) Extract the enic tarball and build driver disk image:
+
+   $ tar xf enic-<version>.tar.bz2
+   $ cd enic-<version>
+   $ ./configure
+   $ make package
+
+3) The directory images/ contains enic-<version>-<release>-<distro>-dd.iso.
+
+Once the ISO has been built, it can be installed one of two ways
+during the Linux distribution installation:
+
+1) Manual during distribution DVD install
+
+  1.1) Red Hat: boot: prompt
+  Boot from the OS DVD image and at the boot: prompt, enter linux dd
+  Or for RHEL 6.x append dd to the kernel command line. This will prompt
+  you for a driver disk.
+
+  1.2) SLES:
+  Boot from the OS DVD image and at the boot: prompt, enter
+  driverupdate=1 at the bootoptions prompt or press F6 and choose "Yes".
+  This will prompt you for a driver disk. The installer will
+  load the driver fron the disk. Once done it will prompt you back
+  for any additional driver disks. When done choose the "Back" button to
+  proceed with installation.
+
+  On all supported Linux distributions, the installer will use the
+  driver from the driver disk during the install (if network
+  connectivity is required), and will replace the built-in driver
+  with the driver from the driver disk once the OS is installed.
+
+  1.3) XenServer:
+  Boot from the OS DVD image and at the boot: prompt, enter 'shell'.
+  You will be presented with a command prompt. Enter 'rmmod enic' to
+  remove the built-in driver. Enter 'exit' to return to installer.
+  Press F9 key when prompted to provide the driver disk. Then proceed
+  with the driver disk installation.
+
+2) Manual during PXE/linux install
+
+  2.1) Red Hat:
+  By adding the dd to the kernel command line, the installer will
+  prompt for a driver disk as in method 1). Add dd to the append line
+  in the PXE/linux config file.  Here is an example PXE/linux config
+  file:
+
+     default rhel5_4
+     prompt 1
+     timeout 60
+
+     label rhel5_4
+     kernel /vmlinuz
+     append initrd=/initrd.img dd
+
+For all methods above, refer to the distribution documentation.
+
+Once the Linux distribution finishes installing and reboots, the
+updated enic driver should be loaded in the running kernel.
+
+
+Install: Source code tarball
+----------------------------
+
+1) Extract the tarball and build/install the driver:
+
+   $ tar xf enic-<version>.tar.bz2
+   $ cd enic-<version>
+   $ ./configure
+   $ make
+
+   # make install (requires administrative privileges)
+
+2) After the driver is installed, re-create the boot loader with the
+   new enic driver:
+
+   SLES12:
+       # mkinitrd --force -m enic
+       (make initrd ramfs image with enic module)
+
+       Note that SLES does not support third-party kernel modules by
+       default. In order to enable the unsupported module, you need to
+       add "allow_unsupported_modules 1" to
+       /etc/modprobe.d/10-unsupported-modules.conf
+
+       Note that you will also need to compile and install an updated
+       Cisco usNIC driver as well.  The Cisco usNIC driver source code
+       is part of the same UCS Drivers download as the enic sources.
+
+   SLES11:
+       # mkinitrd -m enic
+
+   RHEL/CentOS 6.x, 7.x, XS:
+       # mkinitrd <img file> <kernel version> --force --preload enic
+
+       Example:
+       # mkinitrd /boot/initramfs-3.10.0-123.el7.x86_64.img \
+             3.10.0-123.el7.x86_64 --force --preload enic
+   Ubuntu:
+       # mkinitramfs -o /boot/initrd.img-`uname -r` `uname -r`
+
+At this point the driver is installed but not loaded in the running
+kernel.
+
+
+Loading/unloading the enic driver
+=================================
+
+There are two ways to load the updated enic driver:
+
+1. Automatically
+2. Manually
+
+
+Automatically loading the enic driver
+-------------------------------------
+
+If the enic driver was successfully installed, rebooting the server
+should load it into the running kernel.  Even if your Linux
+distribution has an older inbox version of the enic driver, the
+newly-installed enic driver should take precedence.
+
+
+Manually loading the enic driver
+--------------------------------
+
+Manually unloading a previous enic driver and loading a newer enic
+driver is possible in some scenarios, but is not recommended.  For
+example, SLES does not support rmmod'ing kernel modules from a running
+kernel; SuSE recommends configuring modules in /etc/modprobe.d/ and
+rebooting.
+
+This procedure requires administrative privileges.
+
+1) Unload the currently-running driver:
+
+        # rmmod enic
+
+NOTE: Ensure that you are not connected to the server where you are
+      unloading the enic driver via an enic interface when you execute
+      this command, or your connection will be severed.  You may wish
+      to execute this command either on the console or in a KVM
+      session, for example.
+
+2) Load the updated driver:
+
+You can load from the local build directory:
+
+        # /sbin/insmod ./enic.ko
+
+Or you can load from lib/modules if the driver was installed:
+
+        # /sbin/modprobe enic
+
+UEFI Secure Boot
+----------------
+
+The Linux binary kernel driver packages that are distributed by
+cisco.com support UEFI Secure Boot.
+
+Specifically, if UCS servers are booted in UEFI boot mode and have
+Secure Boot enabled, the Linux kernel requires that all drivers must
+be a) cryptographically signed and b) validated by a public key in the
+Linux kernel keychain.
+
+Secure Boot causes Cisco public cryptographic certificates to be
+loaded from the UCS chassis hardware to the Linux kernel keychain.
+The keys from these certificates will successfully validate genuine
+Cisco drivers (e.g., those distributed from cisco.com).
+
+If a driver's signature can be validated against the Cisco public
+keys, the Linux kernel will allow the driver to load.  If a driver's
+signature fails to validate, the Linux kernel will refuse to load it.
+
+When *not* booting with Secure Boot, the Cisco cryptographic
+certificates are *not* loaded in to the Linux kernel.  Hence, when the
+Linux kernel loads a Cisco binary driver from cisco.com, a matching
+public key will not be found that can validate the driver's signature.
+You may see a warning like this:
+
+  Request for unknown module key 'Cisco UCS Driver Signing REL Cert: ...'
+
+However, since the server was not booted with Secure Boot, the Linux
+kernel will load the driver anyway (even though it was unable to
+validate the driver's cryptographic signature) -- the message is only
+a warning.
+
+
+Verify the version of the enic driver in the running kernel
+===========================================================
+
+After you have updated the enic driver and loaded it, you should
+verify that the kernel is actually running the updated driver:
+
+Check that a driver named "enic" is present in the running kernel:
+
+        # /sbin/lsmod | grep enic
+
+Then check the kernel log to see the version the enic driver the last
+time it was loaded:
+
+        # /bin/dmesg | grep enic
+
+Check to ensure that the version is what you expect it to be.
+
+Be sure to check the enic version from the *last* time it was loaded
+in the kernel (e.g., dmesg may still show log messages from when the
+prior enic driver was loaded).
