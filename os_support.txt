@@ -1,0 +1,149 @@
+mpi3mr Linux Device Driver Supported OS Distro list and supported package list
+
+###############################################################################
+Red Hat
+###############################################################################
+ 
+x86_64
+
+#RHEL9
+	el9.5		: (5.14.0-503.11.1.el9_5.x86_64)
+	el9.5_rt	: (5.14.0-503.11.1.el9_5.x86_64+rt)
+	el9.6		: (5.14.0-570.12.1.el9_6.x86_64)
+	el9.6_rt	: (5.14.0-570.12.1.el9_6.x86_64+rt)
+	el9.7		: (5.14.0-611.5.1.el9_7.x86_64)
+	el9.7_rt	: (5.14.0-611.5.1.el9_7.x86_64+rt)
+
+#RHEL10
+	el10.0		: (6.12.0-55.9.1.el10_0.x86_64)
+	el10.0_rt	: (6.12.0-55.9.1.el10_0.x86_64+rt)
+	el10.1		: (6.12.0-124.8.1.el10_1.x86_64)
+	el10.1_rt	: (6.12.0-124.8.1.el10_1.x86_64+rt)
+
+##############################################################################
+SuSE
+##############################################################################
+ 
+x86_64
+
+#SLES15
+	sles15sp5 : (5.14.21-150500.53)	: (default)
+	sles15sp5_rt : (5.14.21-150500.11-rt)	: (default)
+	sles15sp6 :    (6.4.0-150600.21)	: (default)
+	sles15sp6_rt : (6.4.0-150600.6-rt)	: (default)
+	sles15sp7    : (6.4.0-150700.51)	: (default)
+	sles15sp7_rt : (6.4.0-150700.14-rt)	: (default)
+
+#SLES16
+	sles16	: (6.12.0-160000.5)	: (default)
+
+
+###############################################################################
+Ubuntu
+###############################################################################
+ 
+Single source DKMS Deb driver package will work for all supported Ubuntu OS releases.
+Please refer to the driver README file for how to use DKMS deb driver package.
+
+x86_64
+
+	Ubuntu 22.04.3  : (5.15.0-78)  	LTS
+	Ubuntu 22.04.4  : (5.15.0-94)  	LTS
+	Ubuntu 22.04.5  : (5.15.0-119)  LTS
+
+	Ubuntu 24.04.2  : (6.8.0-54)    LTS
+	Ubuntu 24.04.3  : (6.8.0-71)    LTS
+	Ubuntu 24.04.4  : (6.8.0-100)	LTS
+
+################################################################################
+Debian:
+################################################################################
+
+
+x86_64
+        debian 12.11     :       (6.1.0-35)
+	debian 12.13 	 : 	 (6.1.0-42)
+	debian 13.2	 :       (6.12.57+deb13)
+	debian 13.3	 : 	 (6.12.63+deb13)
+
+
+NOTE:
+        1. source DKMS Deb driver package will work for above-mentioned debian OS
+           release. Please refer to the driver README for instructions on how to
+           use the DKMS deb driver package.
+
+        2. Users should have complete root privileges before installing the driver
+           DKMS package to avoid warnings about "ldconfig" and "start-stop-daemon"
+           not being found in the PATH.
+
+        3. In case of a kernel upgrade, if the mpt3sas driver DMKS module
+           installation fails in the upgraded kernel due to a broken DKMS, the
+           inbox driver will be installed in the upgraded kernel.
+
+
+###############################################################################
+OpenEuler
+###############################################################################
+
+x86_64
+	oe22.03sp3-x86_64	: (5.10.0-182.0.0.95.oe2203sp3.x86_64)
+	oe24.03sp2-x86_64 	: (6.6.0-98.0.0.103.oe2403sp2.x86_64)
+	oe24.03sp3-x86_64 	: (6.6.0-132.0.0.111.oe2403sp3.x86_64)
+
+aarch64
+	oe20.03sp4  	: (4.19.90-2312.1.0.0255.oe2003sp4.aarch64)
+	oe22.03sp3	: (5.10.0-182.0.0.95.oe2203sp3.aarch64)
+
+Note for OpenEuler x86_64 OS:
+- Driver RPM and DUD are provided only for oe24.03sp3-x86_64.
+- For all other supported x86_64 OpenEuler versions users must use the source RPM
+
+Please note the following regarding OpenEuler aarch64 OS:
+
+- Only source RPM is supported, binary RPM and DUD are not supported.
+- The kmod source RPM, located in the 'kmod_srpm' folder in the release
+  tarball should be used.
+- Installation steps for the kmod source RPM remain unchanged.
+
+
+###############################################################################
+RedHat container OS:
+###############################################################################
+
+x86_64
+	rhcos4.18.0 : (5.14.0-427.50.1.el9_4.x86_64)
+
+NOTE:
+	1. RHCOS 4.18.0 is based on RHEL 9.4 and includes two kernel versions:
+		- The RHEL 9.4 GCA kernel, and
+		- The RHEL 9.4 point kernel (which is booted by default).
+		  Since the point kernel is the default, the existing binary RPM built
+		  against the GCA kernel will not work. A new driver binary RPM built
+		  specifically for the point kernel will be provided for supported RHCOS
+		  variants.
+	2. No DUD support for RHCOS.
+	3. RPM upgrade is not supported. To install a newer driver RPM, the existing
+	   RPM must be uninstalled first, followed by the installation of the new one.
+
+################################################################################
+SLES Micro container OS:
+################################################################################
+
+x86_64
+	SLE Micro5.5 : (5.14.21-150500.55.19-default)
+
+NOTE:
+	1. SLE Micro 5.5 is based on SLES 15 SP5.
+	2. Existing SLES 15 SP5 RPMs can be used for the SLE Micro 5.5.
+	3. No DUD support for SLE Micro Container OS.
+	4. RPM upgrade is not supported. To install a newer driver RPM, the existing
+	   RPM must be uninstalled first, followed by the installation of the new one.
+
+
+################################################################################
+SLES16 OS:
+################################################################################
+
+Note :
+	SLES16-RT kernel is not released.
+
