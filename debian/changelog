@@ -1,0 +1,5 @@
+mlnx-en (5.4-1.0.3.0.g3952e7b) unstable; urgency=low
+
+  * Initial release
+
+ -- Vladimir Sokolovsky <vlad@mellanox.com>  Mon, 31 Dec 2012 15:38:53 +0200
