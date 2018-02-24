@@ -1,0 +1,22 @@
+#
+# Xilinx SmartNIC net representor device names
+#
+SUBSYSTEM!="net", GOTO="xlnx_net_rep_exit"
+ACTION!="add", GOTO="xlnx_net_rep_exit"
+
+# This comparison will fail when there is no PCI vendor ID defined.
+ENV{ID_VENDOR_ID}!="", GOTO="xlnx_net_rep_with_pci_id"
+
+# This will match representors and produce names for them.
+ATTRS{phys_port_name}!="", ATTRS{phys_switch_id}!="", PROGRAM="/usr/lib/sfc/produce-representor-name.sh %k $attr{phys_port_name} $attr{phys_switch_id}", NAME="%c"
+GOTO="xlnx_net_rep_exit"
+
+LABEL="xlnx_net_rep_with_pci_id"
+
+# Non-Xilinx interfaces are ignored.
+ENV{ID_VENDOR_ID}!="0x10ee", GOTO="xlnx_net_rep_exit"
+
+# This will match PFs and VFs.
+ATTRS{phys_port_id}!="", RUN+="/usr/lib/sfc/trigger-representors.sh %k $attr{phys_port_id}"
+
+LABEL="xlnx_net_rep_exit"
