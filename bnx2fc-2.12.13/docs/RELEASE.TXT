@@ -1,0 +1,2640 @@
+			=============================
+			 R E L E A S E     N O T E S
+			=============================
+
+		QLogic bnx2fc FCoE Modules for Linux
+
+Version 2.12.13 (February 14, 2020):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: Cont106606 - Filesystem goes to read-only after continous error
+            injection.
+   Cause: RQE was handled in deferred context, leading to mismatch between
+          CQE and RQE.
+   Change: Process the RQE with CQE in interrupt ctx.
+   Impact: All
+
+Version 2.12.12 (February 12, 2020):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Compilation error on RHEL8.2.
+   Cause: Re-definition of alloc_workqueue.
+   Change: Fix compilation error on RHEL8.2.
+   Impact: RHEL 8.2
+
+Version 2.12.11 (January 23, 2020):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Compilation error of implicit declaration of mmiowb().
+   Cause: Removal of mmiowb().
+   Change: Remove explicit invocations of mmiowb().
+   Impact: RHEL 8.2
+
+2. Problem: ContXXXXX - Compilation errors on SLES15 SP2.
+   Change: Add SLES15 SP2 support
+   Impact: SLES15 SP2
+
+3. Problem: Cont107890 - RHEL 7.7 server hits an IO Halt to all DA LUNs
+            during the DA failover test
+   Change: Fix scsi command completion after cleanup is posted.
+   Impact: All
+
+Version 2.12.10 (March 07, 2019):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Correctly set max_boundary and max_sector.
+   Cause: max boundary and sector was not getting set properly.
+   Change: Correctly set max boundary and sector.
+   Impact: All
+
+Version 2.12.9 (February 21, 2019):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: Cont105003 - Driver reports DMAE timeout.
+   Cause: Driver was max number of sg count wrongly.
+	  The FW can handle 255 and driver was setting it to 256.
+	  On accessing last sg DMAE was timing out.
+   Change: Limit the IO size according to the FW capability.
+   Impact: All
+
+Version 2.12.8 (February 08, 2019):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Fix compilation on SLES15SP1.
+   Cause: The version shows 15-SP1.
+   Change: Updated Makefile to remove -SP1.
+   Impact: All
+
+Version 2.12.7 (February 07, 2019):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Add support for RHEL8.x
+   Cause: The change in kernel API.
+   Change: Updated Makefile and source code to support RHEL8.x
+   Impact: All
+
+Version 2.12.6 (December 11, 2018):
+===================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Add -g explicitly to EXTRA_CFLAGS so debug symbols are added to the binary object file.
+   Cause: Debug data was not getting added to module binary
+   Change: Add -g gcc option so debug sections are added to module binary
+   Impact: All
+
+2. Problem: ContXXXXX - Do not allow both a cleanup completion and abort completion for the same request.
+   Cause: There is a small window in the driver where if we receive an ABTS response while a cleanup request is pending which may leave an I/O orphaned
+   Change: Only process either a cleanup completion or an abort completion for a request but not both
+   Impact: All
+
+Version 2.12.5 (November 16, 2018):
+=================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Update bnx2fc to initrd during make install.
+   Cause: bnx2fc was not getting updated in initrd during install.
+   Change: Make changes to script to update initrd during install.
+   Impact: All
+
+2. Problem: ContXXXXX - Define retpoline MOD_INFO to "y" if spectre/meltdown support is not inbox.
+   Cause: retpoline was not getting defined if support is not inbox.
+   Change: Change the makefile to handle this correctly.
+   Impact: All
+
+3. Problem: ContXXXXX - Fix compilation issue on newer Citrix DDK.
+   Cause: Newer Citrix DDKs use the string "Citrix Hypervisor" instead of "XenServer".
+   Change: Make changes to check for Citrix as well as XenServer.
+   Impact: All Citrix versions.
+
+4. Problem: ContXXXXX - Changes to support timer API changes.
+   Cause: Timer APIs are changed setup_timer to timer_setup.
+   Change: Make changes to support both the APIs.
+   Impact: All
+
+Version 2.12.4 (August 10, 2018):
+=================================
+
+Fixes & Features
+================
+
+1. Problem: ContXXXXX - Compilation warning on SLES 12 SP4 beta
+   Cause: Compile was using thunk_inline instead of thunk_extern for Spectre/Meltdown mitigation
+   Change: Add check for SLES 12 SP4 to use thunk_extern in Makefile
+   Impact: All
+
+Version 2.12.3 (May 29, 2018):
+==============================
+
+Fixes & Features
+================
+
+1. Add compiler options for Spectre/Meltdown mitigation
+
+Version 2.12.2 (April 16, 2018):
+================================
+
+Fixes & Features
+================
+
+1. Problem: Cont00101161 - RHEL 7.3 'abrt-dump-oops' failures during module reset testing
+   Cause: kref imbalance caused WARN_ON to print stack dump the end of the bnx2fc_eh_abort() function
+   Change: Only do a put on the request if the wait for the cleanup completion times out
+   Impact: All
+
+Version 2.12.1 (March 01, 2018):
+================================
+
+Fixes & Features
+================
+
+1. Problem: Cont00100107 - NPIV-System crashes while deleting fcoe interface.
+   Cause: Race between deleting the main fcoe interface and NPIV port 
+   Change: Flush timer queue earlier in fcoe interface destry sequence to avoid race condition 
+   Impact: All 
+
+2. Update copyright in source files to 2018
+3. Add section to README on how to properly reload bnx2fc driver.
+
+Upstream patches:
+
+1. bnx2fc: Fix check in SCSI completion handler when reqeust has already timed out.
+
+Version 2.12.0 (November 17, 2017):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile errors on SLES 15 and Ubuntu 17.04
+       Cause: Kernel API changes between SLES 12 and SLES 15
+       Change: Add #ifdefs to code to account for API differences in newer kernels
+       Impact: SLES 15 and Ubuntu 17.04
+
+Version 2.11.11 (September 18, 2017):
+=====================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00096676 - SLES 12 SP2 crash during fabric-attach uplink toggle test
+       Cause: Improper reference count handling when both command and ABTS time out
+       Change: Fix reference handling so command is released properly
+       Impact: All
+
+Version 2.11.10 (September 12, 2017):
+=====================================
+
+Fixes & Features
+================
+
+    1. Problem: FLOGI to switch fails if FCF-MAC is not spec default
+       Cause: Driver was not checking FLOGI payload for FCF-MAC to use
+       Change: Use switch provided FCF-MAC if present in FCoE MAC address
+       Impact: All
+
+    2. Problem: Cont00096603 - Unexpected reboot points to bnx2fc
+       Cause: Multiple processes accessing FC stats can overrun one another
+       Change: Serialize FC stats access with mutex
+       Impact: All
+
+Version 2.11.9 (July 13, 2017):
+===============================
+
+Fixes & Features
+================
+
+    1. Problem: CQ95188 - RHEL 7.3 IO halt during switch module restart test
+       Cause: Timer workqueue can't run due to system load which causes abort handler to wait for a long time which holds up the SCSI error handler
+       Change: Use wait_for_completion_timeout() in eh_abort handler so we do not wait indefinitely
+       Impact: All
+
+Version 2.11.8 (June 8, 2017):
+==============================
+
+Fixes & Features
+================
+
+    1. Problem: CQ94453 - System crashes when OOB is loaded on RHEL 7.4
+       Cause: fc_rport_init() call is not getting compiled into RHEL 7.4 driver causing some lport->tt callbacks to not be initialized.
+       Change: Fix up #ifdef so fc_rport_init() is called correctly.
+       Impact: All
+
+Version 2.11.7.3 (June 7, 2017):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compilation errors on Xen Server 7.1
+       Cause: enum fip_mode is not defined even though the kernel version is 4.4
+       Change: Use definition in libfcoe.h instead of kernel version to determine whether to use this enum
+       Impact: All
+
+Version 2.11.7.2 (June 6, 2017):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compilation errors on RHEL 7.4 snapshot 1
+       Cause: The dev_ethtool_get_settings function was removed between RHEL 7.4 alpha and snapshot 1
+       Change: Use fcoe_link_speed_update() like the inbox drivers except where fcoe_link_speed_update is not defined
+       Impact: All
+
+Version 2.11.7.1 (May 24, 2017):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compilation errors on other distros caused by SLES 12 SP3 changes
+       Cause: Wrong ifdef checks
+       Change: Fixup ifdefs
+       Impact: All
+
+Version 2.11.7 (May 24, 2017):
+==============================
+
+Fixes & Features
+================
+
+    1. Problem: Compilation errors on SLES 12 SP3 beta
+       Cause: libfc functions were renamed in SLES 12 SP3 kernel
+       Change: Add support to use new function names where appropriate
+       Impact: SLES 12 SP3 only
+
+Version 2.11.6.1 (March 15, 2017):
+==================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ92246 - Qlogic NX2 cards display speed as "Unknown"
+       Cause: 20Gb speed is not defined in older versions of open-fcoe
+       Change: Add note to README to document this
+       Impact: Documentation only
+
+Version 2.11.6 (February 24, 2017):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile fails on SLES 11 SP3 with 2.11.5 driver.
+       Cause: SLES 11 SP3 does not define fcoe_get_lesb.
+       Change: Port inbox bnx2fc_get_lesb function from SLES 11 SP3 driver for use on SLES 11 SP3 only.
+       Impact: SLES 11 SP3.
+
+Version 2.11.5 (February 17, 2017):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ91312 - system crash stack-protector: Kernel stack is corrupted in: ffffffffa05f487c"
+       Cause: bnx2fc .get_lesb callback, bnx2fc_get_lesb, was causing stack corruption. Inbox driver worked fine.
+       Change: Use same .get_lesb callback in out-of-box driver, fcoe_get_lesb(), as inbox driver
+       Impact: All
+
+Version 2.11.4 (February 07, 2017):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ90445 - Unexpected Behavior with WWN adding Shared Disk
+       Cause: Need to add support for CLP based NVRAM NPIV WWPNs
+       Change: As requested
+       Impact: NPIV only
+
+    2. Problem: If IO is still in cleanup then do not return to SCSI layer
+       Cause: Returning an IO still in cleanup may result in an expected DMA which can cause heap corruption
+       Change: Do not return IO if it is still in cleanup and let the abort handler retry the IO
+       Impact: All (port of VMWare fix)
+
+    3. Update copyright in sources for 2017
+
+Version 2.11.3 (December 20, 2016):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ90212 - NPIV-Virtual port shows offline in OS even though physical port is online.
+       Cause: Frames for NPIV ports were filtered out as the destination ID in the frame didn't match the physical port's fabric ID
+       Change: Also compare the incoming frame's destination address to that of the NPIV ports associated with physical port
+       Impact: NPIV only
+
+Version 2.11.2 (December 5, 2016):
+==================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ90212 - FCOE BFS: LUN not visible during installation of RHEL 6.7 with driver DUD 7.14.11
+       Cause: MAC address passed to firmware for FIP filtering was all 0's
+       Change: Add fip_mac field to the cnic_dev struct and populate with the FIP MAC we acquire from bnx2x
+       Impact: All FIP traffic
+
+Version 2.11.1 (November 3, 2016):
+==================================
+ 
+Fixes & Features
+================
+
+    1. Problem: Cont00087202 - Server responds to another server's VLAN Response causing VLAN Request flood
+       Cause: Firmware wasn't filtering out FIP packets not destined for our MAC address
+       Change: Pass MAC address we obtain from cnic to use for filtering FIP packets.  Note this must be used with storm firmware 7.13.4 and above
+       Impact: All FIP traffic
+
+Version 2.11.0 (September 27, 2016):
+====================================
+
+Fixes & Features
+================
+ 
+    1. Problem: Cont00068281 - Read test fails on toggling link 
+       Cause: Exchange context lost on session upload due to link toggle 
+       Change: Added link_down_timeout module parameter to not upload session on link down but rather wait a period of time before declaring the link down and then using FDISC/ADISC to recovery previously logged in sessions
+       Impact: Tape 
+
+    2. Enhancement: Cont00085300 - BMAPI supports get FCoE port's ResetLUNCount of statistics
+       Change: Add lun reset statistics to drivers sysfs stat node.  Also document statistics exported by driver in README
+       Impact: All
+
+Upstream backports:
+
+bnx2fc: mark symbols static where possible
+bnx2fc: Simplify code
+bnx2fc: replace printk() with BNX2FC_IO_DBG()
+bnx2fc: Convert TMF timeout setting from module parameter to sysfs parameter.
+bnx2fc: Change FCoE initialized statement to pr_info.
+bnx2fc: Update copyright for 2016.
+bnx2fc: bnx2fc_eh_abort(): fix wrong return code.
+bnx2fc: Show information about log levels in 'modinfo'
+
+Version 2.10.6.3 (Aug 23, 2016):
+================================
+ 
+Fixes & Features
+================
+ 
+    1. Problem: Cont00088633 - SLES 11 SP4 crashed during FCoE uplink toggle test.
+       Cause: The RRQ was getting schedule after upload of the connection.
+       Change: Check for upload before issuing RRQ.
+       Impact: All
+
+Version 2.10.6.2 (August 10, 2016):
+===================================
+
+Fixes & Features
+================
+
+    1. Problem: FCoE frames being rejected for wrong source address 
+       Cause: Need to fixup interpretation of return value of ether_addr_equal() in other places in sources 
+       Change: Fixup ether_addr_equal() return value check 
+       Impact: SLES 12 SP2 
+
+Version 2.10.6.1 (August 9, 2016):
+==================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile warnings on non SLES distros 
+       Cause: __BNX2FC_SLES__ is not defined when compiling on non SLES distros
+       Change: Add check that __BNX2FC_SLES__ is defined before other comparison 
+       Impact: All 
+
+Version 2.10.6 (August 9, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00087348 - BFS failing on SLES 12 SP2 
+       Cause: Interpreting ether_add_equal() return value incorrectly 
+       Change: Fix interpretation 
+       Impact: SLES 12 SP2
+
+Version 2.10.5.2 (July 29, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Remove flush dev_loss_tmo work on link up. 
+       Cause: This was causing race if link_up comes before either dev_loss_tmo or fast_io_fail_tmo fires. 
+       Change: Remove flusing of dev_loss_tmo. 
+       Impact: All 
+    2. Problem: Rework terminate_rport_io handler to consider rport and lport state. 
+       Cause: Discovery requests were cancelled without check lport and rport state. 
+       Change: Consider rport and lport state before cancelling discovery work. 
+       Impact: All 
+    3. Problem: Make bnx2fc_rport_terminate_io a NO-OP. 
+       Cause: Exchange manager was getting reset, killing discovery work. 
+       Change: Don't do anything in rport_terminate_io. 
+       Impact: All 
+
+Version 2.10.5.1 (July 11, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile issue on SLES 12 SP2 beta 4. 
+       Cause: 3.14 kernels use ether_addr_equal() and not compare_ether_addr() 
+       Change: Add appropriate #ifdef around calls 
+       Impact: SLES 12 SP2 
+
+Version 2.10.5 (July 7, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00087453 - Multiple servers enter a crash/reboot loop during the FC uplink toggle test 
+       Cause: Received bogus frame from switch triggering a known issue in libfc 
+       Change: Add filters to non-offload FCoE receive path to filter out bogus frames 
+       Impact: All 
+
+Version 2.10.4.3 (June 22, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile errors on SLES 12 SP2. 
+       Cause: fcoe_per_s thread member changed names to kthread 
+       Change: Change name in source code 
+       Impact: SLES 12 SP2 
+
+Version 2.10.4.2 (June 21, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Compile errors on RHEL 6.4 and RHEL 6.5. 
+       Cause: Ubuntu makefile changes were causing RHEL distro to not be defined 
+       Change: Remove Ubuntu Makefile changes for now 
+       Impact: RHEL and Ubuntu 
+
+Version 2.10.4.1 (June 20, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: FCoE interfaces won't start on Citrix 7.0 
+       Cause: Interface creation fails because the driver wasn't compiled with RHEL compatibility. 
+       Change: Make changes to Makefile to make Citrix compile with RHEL compatibility 
+       Impact: Citrix 
+
+Version 2.10.4 (June 20, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Driver will not compile on Ubuntu and Citrix distros 
+       Cause: Makefile wasn't set up to check for Ubuntu and Citrix. 
+       Change: Add Makefile changes 
+       Impact: All 
+
+Version 2.10.3 (March 23, 2016):
+================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00085342 - host reboots while running interop 
+       Cause: Try to return a request back to the SCSI layer that was already offlined. 
+       Change: Check SCSI command device and host back pointers before returning request back to SCSI layer 
+       Impact: All 
+
+Version 2.10.2.1 (February 19, 2016):
+=====================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00084997 - DCBx IEEE: Call trace seen when switching DCBx modes on the switch and nvm cfg option 247 set to auto 
+       Cause: FCoE interface needs to be reset with fcoeadm -r after DCBX mode change 
+       Change: Add section to README about switch DCBX mode change 
+       Impact: Documentation only 
+
+Version 2.10.2 (December 16, 2015):
+==================================
+
+Fixes & Features
+================
+
+    1. Problem: Cont00083977 - stack trace on bnx2fc_if_create when vports login into fabric 
+       Cause: stats sysfs node was writeable with no store function behaind it
+       Change: Remove write attribute from stats sysfs file 
+       Impact: All 
+
+Version 2.10.1 (December 3, 2015):
+==================================
+
+Fixes & Features
+================
+
+    1. Problem: CQ83111 - Compiling errors on UEK4. 
+       Cause: UEK4 uses a 4.1 based kernel so some kernel functions had been removed or replace. 
+       Change: Replace functions that had been change/removed with ones compatible with 4.1 based kernel. 
+       Impact: UEK4
+
+    2. Print netdev name of interfaces that are successfully configured for FCoE.
+
+Version 2.10.0 (October 21, 2015):
+==================================
+
+Fixes & Features
+================
+
+    1. CQ74851: Print additional statistic counters.
+
+    2. Reduce stack usage in __bnx2fc_enable.
+
+    3. Add module parameter tm_timeout.
+
+    4. Fix compile warning for bnx2fc_npiv_create_vports().
+
+    5. Print when we send a fip keep alive.
+
+    6. Added how to create fcoe vlan id to README.TXT.
+
+    7. Check that get_fc_npiv_tbl cnic callback is not null when creating npiv ports.
+
+    8. CQ80672: Allow npiv to be created on SLES11 SP4.
+
+Version 2.9.7 (September 25, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Add module parameters devloss_tmo, max_luns, queue_depth.
+
+Version 2.9.6 (June 30, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Abort, device reset and target reset fail, and escalate all the way up to host reset.
+       Cause: Incorrectly checking the return code from fc_block_scsi_eh().
+       Change: Add an upper bound to the #if test to correctly steer SLES 12 to the correct return code check.
+       Impact: SLES 12 only
+
+    2. Backport upstream patch "bnxfc: Make the function bnx2fc_alloc_work static.
+
+Version 2.9.5 (June 25, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00080340 - Static Linux NPIV ports not logging into the fabric 
+       Cause: Creating static NPIV ports before thei FcoE interface was enabled confused fcoe-utils and caused the FCoE interface to not be enabled. 
+       Change: Move static NPIV creation to after the FCoE interface is enabled. 
+       Impact: ALL 
+
+    2. Problem: Cont00080433 - Double Entries FCoE interfaces in RH6.7 with v2.9.4 
+       Cause: If the first static NPIV table entry had 0 for the WWNN and the WWPN we would still create a phantom FCoE interface. 
+       Change: Check the first entry of the NPIV table for zeroed out information.  Abort static NPIV port creation if this is true. 
+       Impact: ALL 
+
+Version 2.9.4 (June 16, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00079704 - Initiators failed FLOGI on SLES 11 SP4 RC1.
+       Cause: On SLES 11 SP4 the fc_host link into /sys/bus/fcoe/devices/ctlr_xx is not created so the open-fcoe tools do not enable the interface and thus discovery does not happen.
+       Change: Create the interface with the link up on SLES 11 SP4 only.
+       Impact: SLES11 SP4 only.
+
+    2. Feature: Add ability to create vports from NPIV table in nvram.
+
+Version 2.9.3 (April 30, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00078773 - Bronco: Fatal error observed on loading bnx2x driver module on SLES11 SP4
+       Cause: Need Module.supported file for correct module attributes to get set 
+       Change: Added Module.supported file to source tree 
+       Impact: No functional impact 
+
+Version 2.9.2 (April 3, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Fix type in fix for Cont00078311 
+
+    2. Problem: Cont00076811 - Rebranding: Add proper copyright information to bnx2fc Readme and Release Notes.
+       Cause: Need to update copyright message in README
+       Change: Updated copyright message in README
+       Impact: Doc change only
+
+    3. Problem: Cont00078672 - netxtreme2-7.12.08 Linux FCoE Driver compilation/installation fails on Oracle UEKR3U5
+       Cause: Needed to define some special handling for Oracle distributions
+       Change: Update Makefile to detect UEK and update defines in source code that were causing compilation issues
+       Impact: UEK distributions only
+
+Version 2.9.1 (March 11, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00078311 - makefile changes for applicable drivers (bnx2, cnic, bnx2x, bnx2fc, bnx2i) to place driver.ko in the appropriate location 
+       Cause:   Driver .ko file needs to be places in the 'extras' directory 
+       Change:  Copy bnx2fc.ko to the 'extras' directory for the current kernel when make install is issued
+       Impact:  RHEL systems only
+
+    2. Problem: Backport the following upstream commits:
+
+                bnx2fc: bnx2fc_io.c: match wait_for_completion_timeout return type
+		bnx2fc: bnx2fc_fcoe.c: match wait_for_completion_timeout return type
+
+       Cause:   N/A 
+       Change:  Fixed up data type used with wait_for_completion_timeout() kernel call
+       Impact:  No behavior change should be seen 
+
+
+Version 2.9.0 (March 5, 2015):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00076270 - Read/Write Test Failure Running Tape Jammer Scripts 
+       Cause:   Driver was not reissuing task on error detection CQE.
+       Change:  Reissue task on error detection CQE. 
+       Impact:  Tape connections only
+
+Version 2.8.2 (December 12, 2014):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00077131 - Issuing LUN reset to disk causes initiator to relogin into fabric 
+       Cause:   Driver was not waiting long enough for task management command which caused it fail.
+       Change:  Extend task management command timeout to 60 seconds. 
+       Impact:  All
+
+Version 2.8.1 (November 20, 2014):
+==================================
+
+Fixes & Features
+================
+    1. Problem: Cont00076818 - RHEL 6.5 hung tasks during FC port toggle test
+       Cause:   Driver was not cleaning up I/Os after ABTS timeout
+       Change:  Initiate cleanup and return the command to the SCSI layer for requests where the ABTS times out
+       Impact:  All
+
+    2. Problem: Cont00076813 - Rebranding: Need to remove Netxtreme2 from drivers installation path when installing drivers in fcoe BFS 
+       Cause:   NetXtreme2 string still exisited in bnx2fc sources
+       Change:  Remove string
+       Impact:  Doc change only
+
+Version 2.8.0 (November 8, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Backport upstream commits to OOB driver. 
+       Cause:   N/A
+       Change:  Add the following pathces to the driver:
+
+                bnx2fc: fix an error code in _bnx2fc_create()
+                bnx2fc: check IS_ERR() instead of NULL
+
+       Impact:  All
+
+Version 2.7.5 (November 6, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Cont00076519 - Linux loses paths during VE port toggle test 
+       Cause:   Driver logs out or port when a SCSI or ELS command times out or if there is an issue with ABTS processing
+       Change:  Remove explicit log outs from driver
+       Impact:  All
+
+Version 2.7.4 (October 29, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Cont00076504 - Both RHEL 6.6/7.0 running HP server blades crashed during VC FCoE switch FC Port Toggle test 
+       Cause:   Locking needs to be extended to command allocation and command posting to firmware in submission path.
+       Change:  Extend locking to both command allocation and posting request to firmware in submission path. 
+       Impact:  All
+
+Version 2.7.3 (October 13, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Fix for CQ75785 had a semantic error. 
+       Cause:   Needed to use bitwise-OR instead of a logical-OR 
+       Change:  Fixed if statement 
+       Impact:  All
+
+    2. Problem: Cont00075926 - Linux systems fail to PLOGI storage during VC module reboot test 
+       Cause:   HP VC sends a broadcast frame to the initiator that is the same OX_ID as the outstanding FIP FLOGI to the FCF which causes us to interpret a bad frame.
+       Change:  Drop FCoE frames until Linux has established a login with the FCF
+       Impact:  All
+
+    1. Problem: Cont00075927 - Linux systems fail to log back into XP array when LOGO returned after PLOGI 
+       Cause:   Linux fires a PLOGI immediately after the XP returns a LOGO which causes a PLOGI flood
+       Change:  Add a 500 millisecond delay after processing the LOGO before retrying the PLOGI
+       Impact:  All
+
+Version 2.7.2 (September 24, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Cont00075785 - EMC VPLEX LUN unreachable through Broadcom 57810-k over FCoE in ESX 5.5. 
+       Cause:   The driver is passing up FCP_RESID when it shouldn't be because neither the underrun or overrun bits are set in the FCP_RSP. 
+       Change:  The driver has been modified to pass on the FCP_RESID to the SCSI mid-layer only when the underrun or overrun flag is set.
+       Impact:  All
+
+    2. Problem: Cont00074930 - 630M intermittently fails to PRLI after PLOGI on SLES 11 SP3 
+       Cause:   When dev_loss_tmo expires it closes any open exchanges which can include port login commands such as PLOGI.
+       Change:  Flush the dev_loss_tmo work when the driver receives the netdev change event for link to prevent the race condition. 
+       Impact:  All
+
+Version 2.7.1 (September 15, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Merge outstanding upstream commits into the OOB driver. 
+       Cause:   N/A
+       Change:  There are some corner case issues that have been fixed upstream which also need to be in the OOB driver:
+
+                bnx2fc: fix incorrect DMA memory mapping in bnx2fc_unmap_sg_list()
+                bnx2fc: do not add shared skbs to the fcoe_rx_list
+                bnx2i,bnx2fc: Fix inconsistent use of page size (upstream patch)
+                bnx2fc: Improve stats update mechanism
+                bnx2fc: do not scan uninitialized lists in case of error.
+
+       Impact:  All
+
+    2. Problem: Cont00075711 - CNA RHEL7: Unable to run I/O on FCoE LUN, BD list creation failed. 
+       Cause:   Inconsistent use of DMA API in bnx2fc_unmap_sg_list().
+       Change:  Fixed by upstream patch "bnx2fc: fix incorrect DMA memory mapping in bnx2fc_unmap_sg_list()" 
+       Impact:  All
+
+Version 2.7.0 (September 3, 2014):
+=============================
+
+Fixes & Features
+================
+    1. Problem: Cont00075517 - bnx2fc: Driver from package NX II-7.10.60 not getting compile on RHEL 6.6
+       Cause:   Check in Makefile was defining the wrong prototype for dev_get_stats
+       Change:  Fix check in Makefile
+       Impact:  RHEL 6.6 only
+
+    2. Problem: Cont00074746 - Add SLES12 support
+       Cause:   N/A
+       Change:  Documention change only to add SLES 12 to supported SLES version list
+       Impact:  Doc change only
+
+    3. Problem: Update README.txt to reflect currently supported distributions
+       Cause:   N/A
+       Change:  Update README.txt to reflect the distributions that we currently support.
+       Impact:  Doc change only
+
+Version 2.5.5.1 (August 5, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Problem: Revert QLogic rebranding. 
+       Cause:   N/A
+       Change:  Change copyright and company name back to Broadcom 
+       Impact:  Documentation change and version bump only
+
+
+Version 2.5.5 (June 27, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Problem: Cont00074103: VMware paths to SVC storage target are not re-established after failure injection
+       Cause:   The data length was being set as it was a FCP SCSI command
+		This issue was seen in VMware but it has similar problem in linux environemt too.
+		The data length middle path ELS commands sent over an offloaded session can be wrong 
+       Change:  Populate the command based on the ELS payload size
+       Impact:  All
+
+Version 2.5.4 (June 17, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Problem: Cont00073720 - RHEL7.0 System crashes when toggle VC side uplink with MLTT traffic running 
+       Cause:   Using the async abort functionality new to the RHEL 7 kernel was causing crashes in the block layer
+       Change:  Revert back to the behavior of previous kernels
+       Impact:  RHEL 7
+
+Version 2.5.3 (June 3, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Problem: bnx2fc not building on RHEL 6.6 alpha 
+       Cause:   Define for RHEL 6 version needed to be updated so kthread_create_on_node would be defined.
+       Change:  Fix define for RHEL 6 version
+       Impact:  RHEL 6
+
+    2. Problem: Update source and documentation files with QLogic copyright. 
+       Cause:   N/A
+       Change:  bnx2fc source and documentation files updated with QLogic copyright.
+       Impact:  Documentation change only 
+
+Version 2.5.2 (May 14, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Problem: Cont00073580 - Seeing Kernel trace messges when i bring up fcoe interface` 
+       Cause:   libfc is taking a mutex while we are in an atomic context after caling get_cpu
+       Change:  Temporarily release the CPU while making the sleepable libfc call
+       Impact:  All
+
+Version 2.5.1b (Mar 06, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.30
+
+Fixes & Features
+================
+    1. Ported hash_table memory leak fix from upstream
+
+
+Version 2.4.2e (Feb 05, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.7
+
+Fixes & Features
+================
+    1. Problem: Cont00072706 - bnx2fc fails compilation on SLES11.3 and RHEL7.0
+       Cause:   The kthread_create_on_node patch from upstream defines a new
+                backwards compatibility macro which has a bug
+       Change:  Fixed the kthread_create_on_node macro
+       Impact:  All
+
+    2. Changed the max NPIV port support to 64
+
+    3. Fixed the LCQ memory allocation as reference to Cont00072607
+
+    4. Problem: Cont00068978 - Target discovery fails from vport with
+                MAC redirect
+       Cause:   The bnx2fc FIP process engine did not include MAC address update
+                for FDISC
+       Change:  Fixed the FIP process engine
+       Impact:  RHEL6.4 and older, SLES11SP2
+
+
+Version 2.4.2d (Jan 30, 2014):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.7
+
+Fixes & Features
+================
+    1. Problem: Cont00072441 - bnx2fc 2.4.2c RHEL7.0ss1: Call trace seen on
+                creating NPIV port
+       Cause:   There was an upstream change to add the assertion on RTNL
+                lock for ethtool ops which didn't make it to our oob releases
+                yet
+       Change:  Added the RTNL lock patch
+       Impact:  All
+
+    2. Updated copyright year
+
+
+Version 2.4.2c (Dec 17, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.3
+
+Fixes & Features
+================
+    1. Problem: Cont00072103 - system hangs when destroying FCoE initiators by
+                unloading bnx2x
+       Cause:   The fix for Cont71562 has created this problem for older distros
+                which still uses the old FCoE sysfs structure
+       Change:  Removed the flush workqueue fix for older distros
+       Impact:  All
+
+
+Version 2.4.2b (Nov 15, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5, 7.0
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.10.2
+
+Fixes & Features
+================
+    1. Problem: Cont00071765 - Does not compile against RHEL7.0
+       Cause:   The Makefile does not have RHEL7.0 support
+       Change:  Added support
+       Impact:  All
+
+    2. Problem: Cont00070101 - FC-TAPE Host response early to a requested
+                resend delay
+       Cause:   The retry delay was not supported
+       Change:  Added support by returning TARGET_BUSY to the SCSI ML
+                for the corresponding LUN until the retry timer expires
+       Impact:  All
+
+    3. Problem: Cont00071562 - Show "BUG: soft lockup" when unloading bnx2x
+       Cause:   The 3.10 kernel has a change in the scsi removal path where
+                the netdev device must not be removed before the rport removal
+       Change:  Ensure all destroy work has been completed prior to the
+                netdev removal
+       Impact:  All
+
+
+Version 2.4.1e (Oct 30, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.52
+
+Fixes & Features
+================
+    1. Problem: Cont00071596 - RHEL6.5ss4 - System hang, then reboot when
+                connecting to FCoE targets
+       Cause:   Between RHEL6.5ss3 and ss4, the fcoe_ctlr_to_ctlr_dev macro
+                in the libfcoe has been augmented to use the ctlr->cdev ptr
+                instead
+       Change:  Added code to adapt to this patch
+       Impact:  RHEL6.5
+
+
+Version 2.4.1d (Oct 09, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.52
+
+Fixes & Features
+================
+    1. Problem: Cont00071262 - Unable to boot to system when installing with
+                BFS + DUD update + Anaconda patch for RHEL6.5ss1
+       Cause:   The FCoE interface sysfs has been moved under RHEL6.5 and
+                upstream
+       Change:  Added code to move the interface sysfs location for RHEL6.5
+       Impact:  RHEL6.5
+
+
+Version 2.4.1c (Sep 26, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.52
+
+Fixes & Features
+================
+    1. Problem: Cont00071138 - Changing MTU causes FCoE interface to remain
+                linkdown
+       Cause:   The previous rmmod fix has added a redundant setting of the
+                interface->enabled to false in the stop routine which prevented
+                the FCoE ctlr link from being brought back up upon netevent UP           
+       Change:  Removed this setting in the stop routine
+       Impact:  All
+
+    2. Problem: Cont00071154 - RHEL6.5 System panics on creating FCoE interface
+       Cause:   The RHEL6.5 kernel introduced a new fc_disc_config routine to
+                configure the lport for FC discovery which was not being called
+       Change:  Added the call to this fc_disc_config routine upon FC init
+       Impact:  All
+
+
+Version 2.4.1b (Sep 20, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4, 6.5
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.51
+
+Fixes & Features
+================
+    1. Problem: Cont00070975 - bnx2fc does not compile in RHEL6.5 alpha1
+       Cause:   bnx2fc needs to be updated to work with the libfc/libfcoe that
+                is running in RHEL6.5
+       Change:  Added the changes to support RHEL6.5
+       Impact:  All
+
+    2. Problem: Cont00070958 - Call trace and system instability when unloading
+                bnx2x modules
+       Cause:   A rtnl_lock deadlock was observed in the rmmod bnx2x path when it
+                tries to flush fcoemon's sysfs write of the store_ctlr_enabled control
+                param to disable the interface
+       Change:  Fixed this disabling path to skip the unnecessary locking
+       Impact:  RHEL6.5+
+
+
+Version 2.4.0 (Sep 12, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.51
+
+Fixes & Features
+================
+    1. Problem: FCoE offload does not function
+       Cause:   The doorbell formula has been changed in bnx2x-1.78.52 due
+                to VF RSS
+       Change:  Added corresponding doorbell change
+       Impact:  All
+
+    2. Problem: Cont00070728 - SLES11SP2 MEZ75 IO halt with Nexus reboot tests
+       Cause:   A race condition was found between bnx2fc's io timeout handler
+                and the scsi layer's task abort request
+       Change:  Added BNX2FC_FLAG_IO_CLEANUP flag to arbitrate between the two paths
+       Impact:  All
+
+
+Version 2.3.10 (Apr 30, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.21
+
+Fixes & Features
+================
+Fix CQ68159: Second FCoE funciton does not offload after it logs into target
+
+Version 2.3.9 (Apr 11, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.18
+
+Fixes & Features
+================
+Fix Cont00068718: Description field shows BCM57712 for bnx2fc driver in RHEL 6.4
+
+Version 2.3.8 (Mar 28, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.18
+
+Fixes & Features
+================
+Fix Cont00067665: FC Tape - IO error seen on dropping 2 REC ELS req
+
+Version 2.3.7 (Mar 06, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.2, 6.3, 6.4
+SLES Kernel		: SLES 11 SP2, SP3
+Firmware Version        : 7.8.18
+
+Fixes & Features
+================
+Fix Cont00067979: Enable SLES 11 SP3 Support
+Fix Cont00067788: Read throughput rolls off at higher request sizes
+Fix Cont00067988: SLES 11 SP2 installation fails after symbolic name change
+Fix Race condition between eh_abort and IO completion paths.
+
+Version 2.3.6 (Feb 11, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.14
+
+Fixes & Features
+================
+Fix Cont00065827: Unify FC symbolic name format across OS between adapters
+
+Version 2.3.5 (Feb 07, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.14
+
+Fixes & Features
+================
+Fix Cont00067478: 57810 CNA stuck in FIP discovery loop
+
+Version 2.3.4 (Jan 31, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.12
+
+Fixes & Features
+================
+Fix Cont00067470 - Call trace after BFS installation
+
+Version 2.3.3 (Jan 14, 2013):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.12
+
+Fixes & Features
+================
+Fix Cont00067257: Unable to discover HP tape device
+
+Version 2.3.2 (Dec 17, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.9
+
+Fixes & Features
+================
+Fix Cont00066827: Support Linux LIO FCoE target
+
+Version 2.3.1 (Nov 20, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.9
+
+Fixes & Features
+================
+Fix Cont00066612: Increase Max IO size to 512KB
+
+Version 2.3.0 (Sep 20, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.8.2
+
+Fixes & Features
+================
+HP FFA support
+Avoid creating FCoE interface on 0 vlan id.
+Remove potential NULL dereference
+Obtain CRC error count upon NCSI stats request
+Fix incorrect memset in bnx2fc_parse_fcp_rsp
+
+Version 2.2.17 (Aug 03, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.4.9
+
+Fixes & Features
+================
+Avoid NULL dereference while getting host_stats
+
+Version 2.2.16 (Jun 25, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.4.7
+
+Fixes & Features
+================
+Fix Cont00063987: System hangs when destroying FCoE Interface
+
+Version 2.2.15 (Jun 18, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.4.7
+
+Fixes & Features
+================
+Fix Cont00063992: Tx/Rx byte reset to 0 when exceeding 4200MB
+
+Version 2.2.14 (May 29, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.4.4
+
+Fixes & Features
+================
+Debugfs support to collect driver stats.
+
+Version 2.2.13 (May 02, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.51
+
+Fixes & Features
+================
+Fix Cont00063029: Fix version comparison in Makefile for RH6.1
+
+Version 2.2.12 (Apr 24, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.51
+
+Fixes & Features
+================
+Fix Cont00062874: Initiator performs fabric relogin on dropping ABTS reply
+
+
+Version 2.2.11 (Apr 20, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2, 6.3
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.51
+
+Fixes & Features
+================
+Support T7.2a bnx2fc on RHEL 6.3
+
+Version 2.2.10 (Mar 30, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.18
+
+Fixes & Features
+================
+Cont00062154: Initiator becomes offline when it fails to execute task management commands
+
+Version 2.2.9 (Feb 28, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.16
+
+Fixes & Features
+================
+Define new symbol for PARITY_ERROR
+
+Version 2.2.8 (Feb 21, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.14
+
+Fixes & Features
+================
+Set missing capability statistics during ulp_init
+
+Version 2.2.7 (Feb 08, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.14
+
+Fixes & Features
+================
+Perf improvment on RHEL 6.2 kernels by avoiding host lock
+
+Version 2.2.6 (Jan 24, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.11
+
+Fixes & Features
+================
+Export fcoe_capabilities to cnic
+Fix Cont00061013: Kernel panic when adding/removing targets from zone
+Upstream merges
+Support fcoe create on non-vlan interface
+
+Version 2.2.5 (Jan 16, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.11
+
+Fixes & Features
+================
+Fix Cont00060787: Avoid calling bnx2fc_if_destroy with unnecessary locks
+
+Version 2.2.4 (Jan 11, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.11
+
+Fixes & Features
+================
+Fix Cont00060744: Improve error recovery by handling parity errors
+
+Version 2.2.3 (Jan 05, 2012):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.11
+
+Fixes & Features
+================
+Use bnx2x_mfw_req.h instead of bnx2x_hsi.h to include in bnx2fc
+Fix panic when accessing stale pointer in IO path
+
+Version 2.2.2 (Dec 21, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.10
+
+Fixes & Features
+================
+Fix Cont00060537:MLTT reports data corruption when running smaller IO
+Fix Cont00060456: Fix compilation when trace is enabled
+Handle error cases during create on a system that has 2 CPUs or less
+
+Version 2.2.0 (Dec 06, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1, 6.2
+SLES Kernel		: SLES 11 SP1, SP2
+Firmware Version        : 7.2.9
+bnx2x Version           : 1.72.00
+cnic                    : 2.5.7g
+
+Fixes & Features
+================
+Fix Cont00060008: IO miscompares seen on writing 512b sized packets
+Fix Cont00060041: Physical/NPIV ports go offline when interface is toggled.
+
+Version 2.1.9 (Nov 15, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1
+Firmware Version        : 7.0.29
+bnx2x Version           : 1.70.34
+cnic                    : 2.5.7g
+
+Fixes & Features
+================
+Fix soft lockup issue for SLES 11 SP2 kernel
+
+Version 2.1.8 (Nov 07, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.29
+bnx2x Version           : 1.70.34
+cnic                    : 2.5.7g
+
+Fixes & Features
+================
+Fix Cont00059629: Target reset on SLES 11 SP1 doesnt work
+Enable SLES 11 SP2 support
+
+Version 2.1.7 (Nov 02, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.29
+bnx2x Version           : 1.70.34
+cnic                    : 2.5.7g
+
+Fixes & Features
+================
+Enable bnx2fc compilation for SLES 11 SP2 & RHEL 6.2 kernel
+
+Version 2.1.6 (Oct 19, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.29
+bnx2x Version           : 1.70.32
+cnic                    : 2.5.7g
+
+Fixes & Features
+===============
+Fix Cont00059361: Handle ABTS timeout during ulp timeout
+
+Version 2.1.5 (Oct 03, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.28
+bnx2x Version           : 1.70.30
+cnic                    : 2.5.7g
+
+Fixes & Features
+================
+Fix Cont00058930: Initiator port becomes 'linkdown' when system boots up
+Return error statistics of remote peer
+
+Version 2.1.4 (Sep 19, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.26
+bnx2x Version           : 1.70.27
+cnic                    : 2.5.7f
+
+Fixes & Features
+================
+Fix Cont00058540: Kernel panic when creating NPIV port on Brocade fabric
+Fix Cont00057834: DMA: Out of SW-IOMMU space
+
+Version 2.1.3 (Aug 30, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.26
+bnx2x Version           : 1.70.24
+cnic                    : 2.5.7e
+
+Fixes & Features
+================
+Fix Cont00058175: Unable to send lun/tgt reset on SLES 11 SP1 kernels
+Fix Cont00058089: Validate vlan id in NETDEV_UNREGISTER handler
+Fix Cont00058033: README update regarding lldpad settings
+
+Version 2.1.2 (Aug 19, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.26
+bnx2x Version           : 1.70.24
+cnic                    : 2.5.7e
+
+Fixes & Features
+================
+Fix Cont00057693 - Cannot reboot with IO
+Fix Cont00057894  - MCassert with RSCN stress
+Reset max recv frame size during link up
+
+Version 2.1.1 (Aug 08, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.26
+bnx2x Version           : 1.70.23
+cnic                    : 2.5.7d
+
+Fixes & Features
+================
+Fix Cont00057671 - No abort issued for REC when it times out
+
+Version 2.1.0 (Jul 29, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+SLES Kernel		: SLES 11 SP1 Errata kernel
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.22
+cnic                    : 2.5.7d
+
+Fixes & Features
+================
+Support SLES 11 SP1 Errata kernel
+Support 1024 sessions
+
+Version 2.0.9 (Jul 26, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.21
+cnic                    : 2.5.7c
+
+Fixes & Features
+================
+Clear DESTROY_CMPL flag after FW destroy
+Do not re-use FCoE connection id immediately
+Code cleanup in bnx2fc_offload_session
+Fix Cont00057104 - README to include about adminStatus in lldpad.conf
+
+Version 2.0.8 (Jul 19, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.20
+cnic                    : 2.5.7b
+
+Fixes & Features
+================
+Obtain WWNN/WWPN from the shared memory
+Handle NETDEV_UNREGISTER for vlan devices
+Fix Cont00057047 - Not sending FIP LOGO after recovering FCP2 IO error and destroy a FCoE interface
+Support bsg_requests
+Drop unsolicited ABTS requests
+
+Version 2.0.7 (Jul 13, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.19
+cnic                    : 2.5.6d
+
+Fixes & Features
+================
+Remove vlan_id argument from indicate_netevent
+compilation fix for upstream kernel
+
+Version 2.0.6 (Jul 12, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.18
+cnic                    : 2.5.6c
+
+Fixes & Features
+================
+Enable compiling T7.0 driver on upstream kernel
+
+Version 2.0.5 (Jul 08, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.17
+cnic                    : 2.5.6b
+
+Fixes & Features
+================
+Fix Cont00056859 - Send discovery solicitation instead of waiting for DA from the switch
+
+Version 2.0.4 (Jun 29, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.23
+bnx2x Version           : 1.70.16
+cnic                    : 2.5.4b
+
+Fixes & Features
+================
+Fix Cont00056618 - does not repond to modified max advertised receive frame size
+Merge upstream fixes
+
+Version 2.0.3 (Jun 21, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.20
+bnx2x Version           : 1.70.14
+cnic                    : 2.5.4b
+
+Fixes & Features
+================
+Do not arm CQ when there are no CQEs
+Tx BD cache in write tasks
+Fix data protection fault in bnx2fc_unsol_els_work
+
+Version 2.0.2 (Jun 10, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.1
+Firmware Version        : 7.0.20
+bnx2x Version           : 1.70.12
+cnic                    : 2.5.4b
+
+Fixes & Features
+================
+Integrate upstream changes to main branch
+	- Uses inbox libfc/libfcoe
+	- redesigned to work with fcoeutils
+	- integrated T7.0 FW
+check for duplicate NPIV ports
+Fix panic in fc_vport_terminate()
+Fix Cont00055260 - System crashes after rapd link flap test with NPIV ports
+
+Version 2.0.1 (May 03, 2011):
+=============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 7.0.16
+bnx2x Version           : 1.70.09
+cnic                    : 2.5.2b
+
+Fixes & Features
+================
+Enable E3 device
+
+
+Version 0.9.2 (Apr 29, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.34
+bnx2x Version           : 1.64.26
+cnic                    : 2.4.3b
+
+Fixes & Features
+================
+Fix Cont00054734 - MC assert when destroying 255 NPIV ports.
+
+
+Version 0.9.1 (Apr 22, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.34
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.25
+cnic                    : 2.4.2b
+
+Fixes & Features
+================
+Fix Cont00054937 - kernel panic with intel_iommmu option
+
+Version 0.9.0 (Apr 20, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.33
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.24
+cnic                    : 2.4.1d
+
+Fixes & Features
+================
+Fix Cont00054831: bnx2fc description has Broadcom adapter as 57710
+Fix Cont00054820: compilation fixes for RHEL 6.1
+Handle SRR LS_RJT by issuing ABTS immediately
+
+Version 0.8.9 (Apr 14, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.33
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.24
+cnic                    : 2.4.1d
+
+Fixes & Features
+================
+Fix 54706: Hide unknown netevent message from syslog
+Remove VLAN0 workaround for Brocade switches
+
+Version 0.8.8 (Apr 12, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.32
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.23
+cnic                    : 2.4.1c
+
+Fixes & Features
+================
+Fix Cont00054500: Handle CVL with no VN_Port descriptor
+Fix Cont00054551: bnx2fcd does not start when restarting service
+Updated README.txt
+
+Version 0.8.7 (Mar 29, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.30
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.21
+cnic                    : 2.3.5d
+
+Fixes & Features
+================
+Invoke scsi_dma_unmap on IO completions
+Change bnx2fcd daemon start/stop message
+
+
+Version 0.8.6 (Mar 18, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.29
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.19
+cnic                    : 2.3.5b
+
+Fixes & Features
+================
+FW 6.2.9 integration
+
+Version 0.8.5 (Feb 28, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.26
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.17
+cnic                    : 2.3.5b
+
+Fixes & Features
+================
+1. Makefile check for distro/kernel version compatibility.
+2. thread_should_stop check fixes.
+3. Lock related fixes - work lock release before wake up, tgt lock before return_rqe, cq lock.
+
+Version 0.8.4 (Feb 15, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.25
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.16
+cnic                    : 2.3.5b
+
+Fixes & Features
+================
+Fix Cont00052932 - kernel panic when receiving REC LS_ACC after getting delayed FC4DATA
+Fix Cont00052926 - Send smaller size of FC4DATA size than advertised max frame data size
+
+
+Version 0.8.3 (Feb 08, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.24
+Bootcode                : 6.2.5
+bnx2x Version           : 1.64.15
+cnic                    : 2.3.5b
+
+Fixes & Features
+================
+Fix Cont00052453: Send FLOGI with previously logged out fabric's max data frame size.
+
+Version 0.8.2 (Feb 04, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.23
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.14
+cnic                    : 2.3.4f
+
+Fixes & Features
+================
+Fix Cont00052714 - system hang during bnx2x load/unload tests
+Fix Cont00052602 - README should include about changing SLES11 'unsupported-module' parameter 
+Fix Cont00052347 - No FLOGI when host contains more than 8 ports
+
+Version 0.8.1 (Jan 20, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.22
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.13
+cnic                    : 2.3.4f
+
+Fixes & Features
+================
+HSI version checking
+Fix Cont00052259: Driver issues REC when dropping SRR
+Fix Cont00051589: Rephrase "unknown error code"
+Fix Cont00052129: Driver issues REC & ABTS when rewinding tape
+Check for FCoE license only during ulp_init
+
+Version 0.8.0 (Jan 06, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.20
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.11
+cnic                    : 2.3.4b
+
+Fixes & Features
+================
+Ensure that CONF bit is set to 1 during offload
+FCP_CMND lost case, check for reason code "Unable to perform command request" also
+Eliminate percpu threads for L2 traffic
+Introduce percpu thread for IO completions
+FCoE license check in ulp_init and ulp_start
+
+
+Version 0.7.9 (Jan 03, 2011):
+==============================
+Internal Release:
+RHEL Kernel		: RHEL 6.0
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.20
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.11
+cnic                    : 2.3.2f
+
+Fixes & Features
+================
+FCP-2 Tape Support for Sequence level error recovery
+Fix Cont00050816: workaround for cisco rejecting FLOGIs
+Fix Cont00051261/51262: Host/switch go out of sync
+
+Version 0.7.8 (Nov 17, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.36-rc3-fcoe-next2+ (RHEL 6)
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.11
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.08
+cnic                    : 2.3.2c
+
+Fixes & Features
+================
+Fix Cont00050712: Kernel panic when dropping random frame
+
+Version 0.7.7 (Nov 09, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.36-rc3-fcoe-next2+ (RHEL 6)
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.11
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.08
+cnic                    : 2.3.2c
+
+Fixes & Features
+================
+Fix Cont00050713: bnx2fc fails to iniailize a board after hotplug
+Fix Cont00050500: Kernel panic while unloading bnx2fc
+Fix Cont00050797: kernel panic with RSCN stress
+Print bnx2fc version string in syslog
+Enable session caching in FW
+
+Version 0.7.6 (Oct 28, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.36-rc3-fcoe-next2+ (RHEL 6)
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.9
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.06
+cnic                    : 2.3.2c
+
+Fixes & Features
+================
+Fix Cont00050631: unloading bnx2fc driver does not send LOGO to the devices
+Fix Cont00050486: System hangs after rapid cable pull
+
+Version 0.7.5 (Oct 21, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.36-rc3-fcoe-next2+ (RHEL 6)
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.7
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.04
+cnic                    : 2.3.2b
+
+Fixes & Features
+================
+Fix Cont00050470: host fails to login to fabric after reboot
+Fix Cont00050556: ifconfig up/down causes stack trace
+Fix Cont00050327: Driver upgrade option not supported
+Fix Cont00049876: Install from tar README instructions not correct
+Fix Cont00050197: Cannot login to Cisco NPV switch
+
+
+Version 0.7.4 (Oct 14, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.36-rc3-fcoe-next2+ (RHEL 6)
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.7
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.04
+cnic                    : 2.3.2b
+
+Fixes & Features
+================
+
+Fix Cont00049880: Host doesnt boot with upstream kernel
+Fix Cont00050308: Cannot compile sources on RHEL6 RC1
+
+Version 0.7.3 (Oct 12, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.7
+Bootcode                : 6.2.1
+bnx2x Version           : 1.64.03
+cnic                    : 2.3.2b
+
+Fixes & Features
+================
+Fix Cont00050344 - enode, npiv nodes fail to log back after vlan change
+Fix Cont00050226 - sysclass maxframe_size is updated only when hostX directory is created
+Fix Cont00050316 - IO error with 128K transfer size 
+Fix Cont00050331 - sysclass 'speed' of NPIV port is Unknown 
+Fix Cont00050328 - sysclass supported_speeds is "Unknown" 
+
+Version 0.7.2 (Oct 04, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.5
+Bootcode                : 6.0.35
+bnx2x Version           : 1.64.02
+cnic                    : 2.3.1b
+
+Fixes & Features
+================
+Fix Cont00050136: MFS not updated even if MTU is 2300
+Fix Cont00050137: syslog shows "Unknown ABTS response" when recovering IO
+Fix Cont00050173: System hangs discovering > 128 targets
+Fix Cont00050514: Cannot login to Brocade 8000 switch
+
+Version 0.7.1 (Sep 28, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.4.5
+Bootcode                : 6.0.35
+bnx2x Version           : 1.64.02
+cnic                    : 2.3.1b
+
+Fixes & Features
+================
+6.4.5 FW integration with HSI changes
+
+Version 0.7.0 (Sep 01, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.31
+Bootcode                : 6.0.28
+bnx2x Version           : 1.60.38
+cnic                    : 2.2.5l
+
+Fixes & Features
+================
+Fix Cont00049681: Target reset causes warning stack trace
+Fix Cont00049627: Host loses targets during rapid login/logout
+Export FCP stats to apps.
+Do not issue FLOGI if FCF is not selected
+
+Version 0.6.9 (Aug 24, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.31
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.36
+cnic                    : 2.2.5l
+
+Fixes & Features
+================
+Fix Cont00049615: Lun/Tgt reset times out when issued to VMAX target
+
+Version 0.6.8 (Aug 20, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.31
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.36
+cnic                    : 2.2.5l
+
+Fixes & Features
+================
+Fix Cont00049555: bnx2fc: FLOGI not issued for 4 secs even after Disc Adv
+Fix Cont00049542: Free ctx_base mapping when session is uploaded
+Fix Cont00049545: libfcoe: driver sends non-FIP FLOGI to brocade when RSTP is enabled
+
+Version 0.6.7 (Aug 16, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.31
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.34
+cnic                    : 2.2.5i
+
+Fixes & Features
+================
+Fix Cont00048324 - bnx2fcd: Reloading bnx2x multiple times makes bnx2fcd hang
+
+Version 0.6.6 (Aug 12, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.31
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.34
+cnic                    : 2.2.5i
+
+Fixes & Features
+================
+Fix Cont00049258 - fcinfo: stats parameter should be set to 0
+Fix Cont00049334 - panic at libfc_exit
+Fix Cont00049311 - Kernel panic when enabling eth interface on i386 system
+
+Version 0.6.5 (Aug 09, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.30
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.32
+cnic                    : 2.2.5i
+
+Fixes & Features
+================
+Fix Cont00049259: kernel bug while stressing random packet drop with IOs
+Fix Cont00048540: Reload bnx2fc driver in a loop causes system hang
+Fix Cont00048465: Reloading bnx2fc multiple times causes Missing Discovery Advertisement
+Fix Cont00048446: Reloading bnx2x with multipath causes system hang 
+Fix Cont00048155: Kernel panic occurs when unloading driver on SLES11 u1 i386 
+Remove bnx2fc_debug_level description from modinfo output.
+
+Version 0.6.4 (Aug 04, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.30
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.30
+cnic                    : 2.2.5g
+
+Fixes & Features
+===============
+Fix Cont00048193 - IO causes Missing Discovery Advertisment from Brocade switch (SLES only)
+Fix Cont00049115 - Unable to reboot system with IOs
+Fix Cont00049117 - System hangs unloading bnx2x
+Fallback to common exchange pool, if percpu pool is full
+	
+Version 0.6.3 (July 21, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.29
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.28
+cnic                    : 2.2.4d
+
+Fixes & Features
+================
+Fix Cont0048874 - System hangs performing shut/noshut after creating 255 NPIV ports
+
+Version 0.6.2 (July 16, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.35-rc3-fcoe-next4+
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.29
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.28
+cnic                    : 2.2.4d
+
+Fixes & Features
+================
+Fix Cont00048764 - System reboots after injecting FC-CRC error
+libfc: Initiator doesnt retransmit if SCR/FLOGI gets rejected by the switch
+	(open-fcoe review comments incorporated)
+libfcoe: Host does not handle CVL to NPIV instantiated port correctly
+	(Fix duplicate descriptor bug
+
+Version 0.6.1 (July 12, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next4
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.28
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.27
+cnic                    : 2.2.4c
+
+Fixes & Features
+================
+Fix Cont00048515 - Change MTU causes NULL pointer dereference
+Fix Cont00048680 - Reset LUN/tgt every 60 - 120 secs causes kernel panic
+Fix Cont00048547 - Simple IO shows kernel panic against Brocade
+Fix Cont00048142 - SUT port wont log back to switch if port is swapped
+Fix Cont00047552 - No vlan discovery after restarting driver
+Fix Cont00047731 - Host doesnt handle CVL to NPIV initiated port 
+		   (Not verified due to lack of setup)
+
+Version 0.6.0 (July 02, 2010):
+==============================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next3
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.28
+Bootcode                : 6.0.22
+bnx2x Version           : 1.60.26
+cnic                    : 2.2.3k
+
+Fixes & Features
+================
+Fix Cont00047431 - Initiator doesnt retransmit if SCR/FLOGI gets rejected by the switch
+Fix Cont00048644 - disable/enable Brocade switch port causes stack trace
+Fix Cont00048535 - Host does not detect all 128 targets
+Fix Cont00048536 - Host takes long time to detect 128 targets
+Fix Cont00048476 - Kernel bug at slab.c:3006 during IO
+Fix Cont00048416 - ifup/down overnight causes system hang
+
+
+Version 0.5.9 (Jun 18, 2010):
+===========================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next1
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.27
+Bootcode                : 6.0.17
+bnx2x Version           : 1.60.24
+cnic                    : 2.2.3g
+
+Fixes & Features
+================
+
+Fix Cont00048415 - do not offload non-fcp targets
+Fix Cont00048340 - Memory leak during driver unload
+Fix Cont00048303 - Changing MTU while IOs running causes bnx2x panic dump
+Fix Cont00048330 - link down from shut/noshut after 20 secs of down time
+Fix Cont00048404 - NULL pointer dereference at bnx2fc_fipvlan_send
+Fix Cont00048367 - SUT port doesnt login to cisco switch after switch reboot
+
+Version 0.5.8 (Jun 14, 2010):
+===========================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next1
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.25
+Bootcode                : 6.0.17
+bnx2x Version           : 1.60.23
+cnic                    : 2.2.3g
+
+Fixes & Features
+================
+Fix Cont00048331: Stack trace at bnx2fc_netdev_cleanup and bnx2fc_get_vlan from modprobe 
+Cancel timer when issuing lun/target reset
+Do not double complete the IO during cleanup & abts completion
+
+Version 0.5.7 (Jun 11, 2010):
+===========================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next1
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.25
+Bootcode                : 6.0.17
+bnx2x Version           : 1.60.23
+cnic                    : 2.2.3g
+
+Fixes & Features
+================
+Fix Cont00048209: Data corruption with MSA device
+Fix Cont00048213: kernel panics when lun/target resets are done every 60-90 secs
+Fix Cont00047956: Host fails to login to fabric after VLAN ID change
+Fix Cont00048121: fcinfo shows invalid CRC count
+Fix Cont00048273: NULL pointer dereference at bnx2fc_link_ok
+
+
+Version 0.5.5 (Jun 2, 2010):
+===========================
+Internal Release:
+Upstream Kernel Version : 2.6.34-fcoe-next1
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.25
+Bootcode                : 6.0.17
+bnx2x Version           : 1.60.22
+cnic                    : 2.2.3b
+
+Fixes & Features
+===============
+Fix Cont00048071: kernel bug at bnx2fc_io.c:429! when running IO
+Fix Cont00048072: Spurious "missing Discovery Advertisement for fab..." messages when I/O
+Fix Cont00048058: syslog shows "bnx2fc: ERROR! active_ios < 0" when running IO
+Fix Cont00047905: Loading driver with incorrect parameters causes stack trace
+Fix Cont00048060: syslog shows "udevd Not inated" and a host gets kernel panic
+Fix Cont00047750: Initiator sends FCP_DATA packets sized larger than target's MAX_RX_SIZE
+Fix Cont00048055: IO failed in 5 mins when dropping random frames.
+
+
+Version 0.5.3 (May 28, 2010):
+============================
+Internal Release:
+Upstream Kernel Version : 2.6.34-rc3-fcoe-next3
+SUSE Kernel             : SLES 11u1
+Firmware Version        : 6.0.24
+Bootcode                : 6.0.17
+bnx2x Version           : 1.60.21
+cnic                    : 2.2.3b
+
+Fixes & Features
+===============
+Fix Cont00047695: target and lun reset overnight with IO causes losing target(s)
+Fix Cont00048026: cannot issue lun/target reset on RHEL
+Fix Cont00047297: restructure bnx2fc_cmd structure to optimize on size.
+Fix Cont00048031: syslog shows lots of Missing Discovery Advertisement
+Fix Cont00047752: driver does not support max IO size greater or equal to 64K
+Fix Cont00047921: wwpn & wwnn are 0 in sysfs
+Fix Cont00047917: host intermittently sends ABTS's during TEP 72 hours run
+Fix Cont00047927: bnx2fc_cmd_mgr_alloc failed when loading bnx2fc on SLES11 x86
+Fix Cont00047928: Null pointer dereference at bnx2fc_start+0x90/0x140 on
+                  Sles11 SP1 RC3 X86
+Fix Cont00047899: Host shows kernel panic regarding VLAN when loading bnx2fc
+                  driver on SLES 11 SP1 RC3 x86
+
+Version 0.5.2 (May 24, 2010):
+============================
+Internal Release:
+Upstream Kernel Version	: 2.6.34-rc3-fcoe-next1-00551-g1d0c2d2 
+SUSE Kernel		: SLES 11u1
+Firmware Version	: 6.0.24
+Bootcode		: 6.0.17
+bnx2x Version		: 1.60.20
+cnic			: 2.2.3b
+
+Fixes & Features
+================
+Discover vlan id across link up and link down
+Fix Cont00047474 - driver fails to send READ CAPACITY 16
+Fix Cont00047731 - Host doesnt handle CVL to NPIV ports
+Check for order and missing critical descriptors for FIP ELS requests
+Do not offload sessions with initiator ports
+Do not offload non-FCP targets
+modified fixes that were submitted to open-fcoe:
+- Honor LS_ACC response codes for PRLI
+- Retry after LS_RJT for a PRLI request
+- Handle unsolicited PRLO request
+- Handle duplicate critical descriptors
+- Fix remote port restart problem
+
+Version 0.5.1 (May 11, 2010):
+============================
+Internal Release:
+Upstream Kernel Version	: 2.6.34-rc3-fcoe-next-00481-g317b11e 
+			  (same kernel as 0.3.0)
+SUSE Kernel		: SLES 11u1
+Firmware Version	: 6.0.22
+Bootcode		: 6.0.17
+bnx2x Version		: 1.60.18
+cnic			: 2.2.1c
+
+Fixes & Features
+================
+
+Fix to find devices during startup
+Time IOs within driver, issue ABTS upon timer expiry
+Honor FW error codes and issue ABTS immediately
+Fix Cont00046931 - send solicitation after 2.5 * fka instead of 3 * fka (SLES only)
+Fix Cont00047434 - No PRLI to larget number of targets
+
+Version 0.5.0 (Apr 30,2010):
+============================
+Internal Release:
+Upstream Kernel Version	: 2.6.34-rc3-fcoe-next-00481-g317b11e 
+			  (same kernel as 0.3.0)
+SUSE Kernel		: SLES 11u1
+Firmware Version	: 6.0.20
+Bootcode		: 6.0.17
+bnx2x Version		: 1.60.16-1
+cnic			: 1.10.3b
+
+Fixes & Features
+================
+VLAN discovery
+Common driver package for both upstream and SUSE.
+Fix Cont00047473 - FLOGI RJT causes NULL pointer dereference
+Fix race condition between rmmod and linkdown processing
+Double the size of SQ to handle non-SCSI commands
+Fail target offload if the number of offload sessions exceed 128.
+
+Version 0.3.0 (Apr 23, 2010):
+=============================
+Internal Release:
+Kernel Version		: 2.6.34-rc3-fcoe-next-00481-g317b11e
+Firmware Version	: 6.0.20
+Bootcode		: 6.0.17
+bnx2x Version		: 1.60.16-1
+cnic			: 1.10.3b
+
+Fixes & Features:
+=================
+Fix Cont00047299: offload compl goes in endless loop after unload bnx2fc from trying to discover 128 targets 
+Fix Cont00047199: Do not allow creating duplicate vn_ports
+Retire ox_id for r_a_tov secs even when target responds with LS_RJT for an ABTS
+Rescan the CQ after arming it.
+Fix Cont00047316: Discovery failed for port with more than 128 targets resulted in no targets login
+Fix Cont00047142: Cable Pull: Immediate IO errors
+
+
+Version 0.2.9 (Apr 09, 2010):
+=============================
+Internal Release:
+Kernel Version		: 2.6.34-rc1-fcoe-next-00039-g858742c
+Firmware Version	: 6.0.18
+Bootcode		: 6.0.14 (PFC enabled bootcode)
+bnx2x Version		: 1.60.13
+cnic			: 1.10.2D
+
+Fixes & Features:
+=================
+
+PFC enablement release.
+
+Kernel Fixes:
+------------
+Fix Cont00046408 - PRLI LS_ACC response codes ignored 
+
+bnx2fc Fixes:
+-------------
+Fix Cont00046450 - Reject malformed PLOGI packet
+Fix Cont00046422 - System takes long time to logout 128 targets
+Fix Cont00046817 - Upload completion timeout
+Fix Cont00046986 - Offload error causes panic from cable pull
+Fix Cont00046936 - Panic dump from unload/load bnx2fc
+Fix panic caused due to BUG_ON(port_id != tgt->sid)
+
+
+Version 0.2.8 (Mar 23, 2010):
+=============================
+Internal Release:
+Kernel Version		: 2.6.34-rc1 (fcoe-next)
+Firmware version	: 6.0.15
+bootcode		: 6.0.11
+bnx2x version		: 1.60.12
+cnic			: 1.10.2c
+
+
+Features & Fixes:
+=================
+
+57712 Enablement release.
+
+Kernel Fixes:
+------------
+1. scsi_dh_emc: fix mode select request setup
+2. Fix Cont00045892: Protect device shutdown from hotplug events
+3. Fix Cont00046297: System becomes non-responsive reciving non-critical descrs.
+4. Fix Cont00046296: Host doesnt accept disc adv frames with non-critical descrs.
+5. Fix Cont00046410: System can't reboot after running 'LOGO from target' testcase.
+6. Fix Cont00046290: Do not reject unsolicited PRLO
+7. Fix Cont00046304: Retry after LS_RJT for a PRLI request
+8. Fix Cont00046389: No solicitation if adv is dropped
+9. Fix Cont00046371: Host does not drop Solicited Disc Adv reply
+10.Fix Cont00046333:Drop packets with mismatched MAC address.
+
+bnx2fc Fixes:
+------------
+1.  Fix bnx2fc_cmd_timeout to handle timeout of BNX2FC_SCSI_CMD
+2.  Complete cleanup only when a thread is waiting for it.
+3.  Avoid list_for_each_safe to traverse active_cmd_queue while flushing active ios
+4.  Fix race conditions and avoid holding host_lock
+5.  Avoid dropping the tgt_lock while traversing active_cmd_queue in lun/tgt reset
+6.  Change tgt->flags to bit fields
+7.  Do not hold tgt_lock while issuing RRQ
+8.  Fix Cont00046336 - Host returns Incorrect LESB error count
+9.  Fix cleanup completion panic
+10. Fix Cont00046263: wrong host responses to unsolicited RNID
+11. Fix Cont00046295: Do not reply to unsolicited ESTC, TEST, FAN, CSU requests
+12. Change fcoe_percpu to bnx2fc_percpu
+13. Fix Cont00046499: Unloading bnx2fc with multiple NPIV ports causes stack trace
+14. Integrate upstream change to per_cpu variable for device stats.
+15. Fix system hang when unloading bnx2x without unloading bnx2fc.
+16. Fix rmmod hang when bnx2x is unloaded while IOs are going on.
+
+
+Version 0.2.6 (Feb 22, 2010):
+=============================
+
+Internal Release:
+Kernel Version		: 2.6.33-rc4 (fcoe-next)
+Firmware version	: 6.0.9
+bootcode		: 6.0.7
+bnx2x version		: 1.60.09
+cnic			: 1.10.1c (bnx2fc-only release)
+
+Features & Fixes:
+=================
+
+  1. Works both on port 0 and port 1
+  2. PFC Enabled
+  3. Fix Cont00045558 - Vlan interface configuation on second port hang system 
+  4. Fix Cont00045626 - ifconfig does not complete changing MTU 2300 -> 1500. 
+  5. Fix Cont00045892 - Cannot shutdown a system
+  6. Fix Cont00045915 - No vfc link and system hang when unload bnx2fc 
+                        on port 1 with bootcode 6.0.7 and 5.2.90.
+  7. Fix Cont00045944 - rmmod hang with "eth4: unknown type KCQE"
+  8. Fix Cont00045956 - IO fails with PFC 
+  9. Fix Cont00045971 - Heavy IO with Link Level Pause shows a stack trace 
+  10.Fix Cont00046003 - Too many 'unable to alloc io_req' 
+  11.Fix Cont00046017 - FIP Keep Alive VN_Port send only 1 time 
+ 
+
+Version 0.2.3 (Feb 19, 2010):
+=============================
+
+Internal Release:
+Kernel Version: 2.6.32 (fcoe-next)
+Firmware version: 6.0.7
+bnx2x version: 1.60.05_1 (Plus some workarounds from bnx2x team)
+
+Features:
+========
+
+  1. PFC Enablement Changes
+  2. Fix Cont00045627 - Write failure when IO size is >= 4K
+  3. Resolve lock ordering between hba_mutex and lp_mutex
+  4. Remove hba_mutex during driver init and exit
+  5. Fix Cont00045621: Inconsistency discovering multiple targets
+  6. Synchronize modprobe and rmmod
+  7. Fix Cont00045503: Login to the fabric after link goes down and comes back up
+  8. Remove vlan id from the port wwn.
+  9. Ensure that bnx2fc is loaded only on a 10G device
+  10.Fix Cont00045593: A system hangs if rebooting the system while IO is running 
+
+
+Version 0.2.1 (Jan 27, 2010):
+=============================
+
+Internal Release:
+Kernel Version: 2.6.32 (fcoe-next)
+
+	Fixes:
+	======
+
+	1. Cont00045422: Installing kernel-2.6.32.fcoe.next-5.bcm.x86_64.rpm
+	   causes firmware loading error when a system boots up 
+
+	2. Cont00045425: /lib/modules/.../modules.dep not updated after installing
+	   bnx2fc kernel and driver kits 
+
+	3. Cont00045493: Cannot finish unloading bnx2fc driver and cause kernel 
+	   panic when interface is down 
+
+	4. Cont00045524: a system shows a BUG stack trace when running IO on more
+	   than 16 LUNs
+
+	5. Cont00045538: has an incorrect symbolic node name
+
+	6. Cont00045547: port_type should be 'unknown' if the port is down 
+
+
+Version 0.2.0 (Jan 19, 2010):
+=============================
+
+Internal Release:
+Kernel Version: 2.6.32 (fcoe-next)
+
+Installation Instructions:
+==========================
+1. Install the kernel
+
+	rpm -ivh kernel-2.6.32.fcoe.next-5.bcm.x86_64.rpm
+
+2. Install bnx2fc/cnic/bnx2x drivers
+	
+	rpm -Uvh bnx2fc-0.2.0-3.bcm.x86_64.rpm
+	rpm -Uvh bnx2fc-debuginfo-0.2.0-3.bcm.x86_64.rpm
+
+3. Edit /boog/grub/menu.lst to make this as a default kernel  OR
+   Select this kernel in the boot menu while the system is booting up
+
+4. reboot
+
+5. Start vlan interface
+
+	ifconfig ethX mtu 2300 up
+	modprobe 8021q
+	vconfig add ethX <vlan_id>
+	ifconfig ethX.<vlan_id> up
+
+   ethX is the ethernet interface connected to the FCF.
+
+6. modprobe bnx2fc <vlan_id>  [default is 4]
+
+[NOTE] 1. If bnx2fc rpm fails to install due to conflict with previosly installed
+       bnx2x driver, remove it by running 'rpm -e bnx2x'
+
+       2. If bnx2x driver fails to load due to dependency with crc32c, manually run
+	- modprobe crc32c
+	- modprobe bnx2x
+       3. If there is a firmware loading error during system boot up after installing
+          the kernel and bnx2fc drivers, install the firmware rpm as well.
+	rpm -Uvh kernel-firmware-2.6.32.fcoe.next-5.bcm.x85_64.rpm
+
+Current Limitations:
+====================
+1. No PFC/DCBx
+2. Upstread Only Release (This is not the driver that can be directly installable on RHEL5.4 kernel)
+
+Debug Data to collect in case of failure:
+=========================================
+1. syslog (/var/log/messages)
+2. uname -a output
+3. grcDump (for FW asserts) 
