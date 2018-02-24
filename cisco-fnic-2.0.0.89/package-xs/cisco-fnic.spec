@@ -1,0 +1,95 @@
+# We do not want debug packages
+%define debug_package %{nil}
+# We do not want rpmbuild to strip off the digital signature
+%define __brp_strip %{nil}
+
+%define uname  %{kernel_version}
+%define module_dir updates
+%define _rpmfilename %%{ARCH}/%%{NAME}-%{xs_release}-%{kernel_version}-modules-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
+
+Summary:	Cisco VIC MQ FCoE and NVME HBA Driver Update Package
+Name:		cisco-fnic
+License:	GPLv2
+Vendor:		Cisco
+Version:        2.0.0.85
+Release:        220.0
+Epoch:          1
+
+Group:		System/Kernel
+URL:		https://www.cisco.com/
+Source0:	%{name}-2.0.0.85.tar.bz2
+Source1:	fcc
+Source2:	nvmef-connect.tar.bz2
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-2.0.0.85-220.0-XXXXXX)
+BuildRequires:	%kernel_module_package_buildreqs
+
+%description
+Cisco VIC MQ FCoE and NVME HBA Driver Update Package
+
+%prep
+%setup -n fnic-%{version}
+
+# Unpack the nvmef-connect tarball
+%setup -D -T -b 2 -n nvmef-connect
+
+%build
+# We started in the nvmef-connect directory, so build that.
+%{__make}
+
+# Now cd back into the fnic directory
+cd ../fnic-%{version}
+./configure 
+
+# Use the fnic Makefile here: it will use the kernel Makefile to build
+# the .ko, and then if configure selected it, the fnic Makefile will
+# sign the .ko.
+num_procs=`cat /proc/cpuinfo | grep processor | wc -l`
+%{__make} -j $num_procs
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+export INSTALL_MOD_PATH=%{buildroot}
+export INSTALL_MOD_DIR=%{module_dir}
+
+# We started in the nvmef-connect directory, so install that.
+install -D -m 500 nvmef-connect $RPM_BUILD_ROOT/usr/bin/nvmef-connect
+
+# Now cd over to the fnic dir and install that
+cd ../fnic-%{version}
+
+# Use the kernel Makefile here because the fnic Makefile runs "depmod"
+# (which we don't want/need to do here -- we're just copying the .ko
+# to the right location in the build tree so that it can be packaged).
+%{__make} -C /lib/modules/4.19.0+1/build M=$PWD modules_install
+
+# Cleanup unnecessary kernel-generated module dependency files.
+find $INSTALL_MOD_PATH/lib/modules -iname 'modules.*' -exec rm {} \;
+
+# Install these directly from their source locations
+install -D -m 500 %{SOURCE1} $RPM_BUILD_ROOT/usr/bin/fcc
+
+%clean
+rm -rf %{buildroot}
+
+%post
+/sbin/depmod %{kernel_version}
+%{regenerate_initrd_post}
+
+%postun
+/sbin/depmod %{kernel_version}
+%{regenerate_initrd_postun}
+
+%posttrans
+%{regenerate_initrd_posttrans}
+
+%files
+%defattr(-,root,root,-)
+/lib/modules/%{uname}/%{module_dir}/*.ko
+%defattr(500,root,root)
+/usr/bin/nvmef-connect
+/usr/bin/fcc
+
+%changelog
+* Tue Jun 11 2019 Jeff Squyres <jsquyres@cisco.com>
+- First support for fnic-unified driver on Xen Server

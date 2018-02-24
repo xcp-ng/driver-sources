@@ -1,0 +1,84 @@
+%define _rpmfilename %%{NAME}-%{version}-%{release}.%%{ARCH}.rpm
+
+# Required to support secure-boot:  Determine service-pack level.
+# From https://www.suse.com/documentation/suse-best-practices/singlehtml/sbp-kmp-manual/sbp-kmp-manual.html
+%define sle_version %(tr '\\n' ' ' < /etc/SuSE-release | sed -rn 's/^SUSE Linux Enterprise ([A-z]+) ([0-9]+).*PATCHLEVEL = ([0-9]+).*$/\\2\\3/p')
+
+Name:           cisco-fnic
+License:        GPL-2.0-only
+Vendor:         Cisco
+Version:        @FNIC_VERSION@
+Release:        @FNIC_BUILD_ID@
+Summary:        Cisco VIC MQ FCoE and NVME HBA Driver Update Package
+
+Group:          System/Kernel
+URL:            https://www.cisco.com/
+Source0:        %{name}-%{version}.tar.bz2
+Source1:	%{name}.files
+Source2:	fcc
+Source3:	nvmef-connect.tar.bz2
+BuildRoot:      %(mktemp -ud %{_tmppath}/%{name}-@FNIC_VERSION@-@FNIC_BUILD_ID@-XXXXXX)
+BuildRequires:  %kernel_module_package_buildreqs
+BuildRequires:  sles-release
+BuildRequires:  zlib-devel
+BuildRequires:  kernel-default
+BuildRequires:  python3
+
+%kernel_module_package -b -f %{SOURCE1} default
+
+%description
+Cisco VIC MQ FCoE and NVME HBA Driver Update Package
+
+%prep
+%setup -n cisco-fnic-@FNIC_VERSION@
+echo "fnic.ko external" > Module.supported
+
+# Unpack the nvmef-connect tarball
+%setup -D -T -b 3
+
+%build
+# We do not use the VIC_SWIMS_CONFIGURE_CLI_OPTIONS macro here because
+# SLES uses the build(1) system to make kernel RPMs, which does
+# everything inside a chroot.  Hence, we have to manually re-create
+# the signing options that are suitable in a chrooted environment.
+if test -n "@VIC_SWIMS_TICKET_FILE@" -a -n "@VIC_SWIMS_SIGNING_SCRIPT@"; then
+    ticket_name=`basename @VIC_SWIMS_TICKET_FILE@`
+    script_name=`basename @VIC_SWIMS_SIGNING_SCRIPT@`
+    extra="--with-swims-ticket-file=/sign/$ticket_name --with-swims-signing-script=/sign/$script_name --with-swims-key-type=@VIC_SWIMS_KEY_TYPE@"
+fi
+./configure $extra --disable-compile-without-retpoline
+
+# Use the fnic Makefile here: it will use the kernel Makefile to build
+# the .ko, and then if configure selected it, the fnic Makefile will
+# sign the .ko.
+num_procs=`cat /proc/cpuinfo | grep processor | wc -l`
+%{__make} -j $num_procs
+
+# We started off in the fnic directory, so cd back out into the
+# nvmef-connect directory and build it.
+cd ../nvmef-connect
+%{__make}
+
+%install
+export INSTALL_MOD_PATH=%{buildroot}
+export INSTALL_MOD_DIR=updates
+
+# Use the kernel Makefile here because the fnic Makefile runs "depmod"
+# (which we don't want/need to do here -- we're just copying the .ko
+# to the right location in the build tree so that it can be packaged).
+%{__make} -C @KDIR@ M=$PWD modules_install
+
+# We started in the fnic tarball directory
+# Cd back over to the nvmef-connect directory
+cd ../nvmef-connect
+install -D -m 500 nvmef-connect $RPM_BUILD_ROOT/usr/bin/nvmef-connect
+
+# Install these directly from their source locations
+install -D -m 500 %{SOURCE2} $RPM_BUILD_ROOT/usr/bin/fcc
+
+%clean
+rm -rf %{buildroot}
+
+%changelog
+* Fri Oct 12 2018 Jeff Squyres <jsquyres@cisco.com>
+- Add support for digitally signing fnic.ko
