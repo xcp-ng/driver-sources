@@ -1839,8 +1839,10 @@ VIRTCHNL_CHECK_STRUCT_LEN(12, virtchnl_fdir_del);
 
 /* Size of memory required for struct @p followed by an array count of @count
  * of member @member. */
-#define struct_size(p, member, count) 		\
+#ifndef struct_size
+#  define struct_size(p, member, count) 		\
 	(sizeof(*(p)) + count * sizeof(*((p)->member)))
+#endif
 
 #define __vss_full(p, member, count, old)				      \
 	(struct_size(p, member, count) + (old - struct_size(p, member, 0)))
