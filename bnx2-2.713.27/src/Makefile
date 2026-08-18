@@ -248,7 +248,7 @@ ifeq ($(shell grep tcp_v6_check $(LINUXSRC)/include/net/ip6_checksum.h > /dev/nu
 	BNX2X_EXTRA_CFLAGS += -D_DEFINE_TCP_V6_CHECK_
 endif
 
-ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/random.h > /dev/null 2>&1 && echo prandom_bytes),)
+ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/{p,}random.h > /dev/null 2>&1 && echo prandom_bytes),)
 	BNX2X_EXTRA_CFLAGS += -D_DEFINE_PRANDOM_BYTES_
 endif
 
@@ -507,4 +507,3 @@ endif
 clean:
 	-rm -f bnx2.o bnx2.ko bnx2.mod.c bnx2.mod.o bnx2.4.gz cnic.o cnic.ko cnic.mod.c cnic.mod.o .bnx2.*.cmd .cnic.*.cmd *.markers *.order *.symvers
 	-rm -rf .tmp_versions
-
