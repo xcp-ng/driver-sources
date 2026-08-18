@@ -111,7 +111,7 @@
 #define STATIC_KEY_FALSE_INIT \
 	/* (struct static_key_false) */ { .key = STATIC_KEY_INIT_FALSE }
 
-#ifdef HAVE_JUMP_LABEL
+#if 1 || defined(HAVE_JUMP_LABEL)
 /* dd_key_init() is used (indirectly) with arg like "(STATIC_KEY_INIT_FALSE)"
  * from DEFINE_DYNAMIC_DEBUG_METADATA(), which, depending on config has many
  * different definitions (including helper macros).
