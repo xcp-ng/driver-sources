@@ -176,7 +176,7 @@ ifneq ($(shell echo 'int main(){return 0;}' | gcc -x c $(THUNK_OPTIONS) - 2>/dev
 	override EXTRA_CFLAGS += $(THUNK_OPTIONS)
 endif
 
-ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/random.h > /dev/null 2>&1 && echo prandom_bytes),)
+ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/{p,}random.h > /dev/null 2>&1 && echo prandom_bytes),)
 	override EXTRA_CFLAGS += -D_DEFINE_PRANDOM_BYTES_
 endif
 
