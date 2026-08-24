@@ -100,13 +100,13 @@ ROCE ?= 1
 
 SOURCES = qede_main.c qede_fp.c qede_filter.c qede_ethtool.c qede_dcbnl.c qede_ptp.h qede_ptp.c qede.h qede_compat.h qede_hsi.h
 ifeq ($(ROCE), 1)
-	SOURCES += qede_rdma.c qede_rdma.h 
+	SOURCES += qede_rdma.c qede_rdma.h
 endif
 
 MODULE_NAME = qede
 
 EXTRA_CFLAGS += -DDRV_MODULE_NAME=\"$(MODULE_NAME)\" -DCONFIG_DCB
-obj-m += $(MODULE_NAME).o 
+obj-m += $(MODULE_NAME).o
 qede-objs = $(patsubst %.c,%.o,$(filter %.c, $(SOURCES)))
 
 # The && / || logic is very peculiar, and works opposite to what is expected, I.e., if The command running
@@ -176,7 +176,7 @@ ifneq ($(shell echo 'int main(){return 0;}' | gcc -x c $(THUNK_OPTIONS) - 2>/dev
 	override EXTRA_CFLAGS += $(THUNK_OPTIONS)
 endif
 
-ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/random.h > /dev/null 2>&1 && echo prandom_bytes),)
+ifeq ($(shell grep "prandom_bytes" $(LINUXSRC)/include/linux/{p,}random.h > /dev/null 2>&1 && echo prandom_bytes),)
 	override EXTRA_CFLAGS += -D_DEFINE_PRANDOM_BYTES_
 endif
 

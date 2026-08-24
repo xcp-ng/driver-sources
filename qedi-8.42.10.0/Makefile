@@ -58,6 +58,7 @@ endef
 
 DEFINES += $(call set-def,SESS_LOCK,scsi/libiscsi.h,back_lock)
 DEFINES += $(call set-def,PRANDOM_API,linux/random.h,prandom_u32)
+DEFINES += $(call set-def,PRANDOM_API,linux/prandom.h,prandom_u32)
 DEFINES += $(call set-def,STRUCT_SCSI_RSP,scsi/iscsi_proto.h,iscsi_scsi_rsp)
 DEFINES += $(call set-def,STRUCT_SCSI_REQ,scsi/iscsi_proto.h,iscsi_scsi_req)
 DEFINES += $(call set-def,STRUCT_LOGIN_REQ,scsi/iscsi_proto.h,iscsi_login_req)
@@ -120,7 +121,7 @@ else
 endif
 
 ifneq ($(shell echo 'int main(){return 0;}' | gcc -x c $(THUNK_OPTIONS) - 2>/dev/null && echo thunk),)
-  override EXTRA_CFLAGS += $(THUNK_OPTIONS) 
+  override EXTRA_CFLAGS += $(THUNK_OPTIONS)
 endif
 
 override EXTRA_CFLAGS += $(addprefix -D,$(DEFINES))
